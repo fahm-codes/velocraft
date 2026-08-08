@@ -2,6 +2,8 @@
 
 Welcome to **Velocraft**, a full-stack car replica toy store (E-commerce) and integrated Customer Relationship Management (CRM) platform built with React, Node.js, and Express.
 
+website link : https://velocraft-sigma.vercel.app
+
 ---
 
 ## 1. React Concepts & Architecture Explanations
