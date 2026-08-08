@@ -558,7 +558,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                     <input 
                       type="password" 
                       className="form-input" 
-                      placeholder="â€¢â€¢â€¢" 
+                      placeholder="CVV" 
                       value={cardCvv}
                       onChange={(e) => setCardCvv(e.target.value)}
                       maxLength="4"
@@ -800,7 +800,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                           <input 
                             type="password" 
                             className="form-input" 
-                            placeholder="â€¢â€¢â€¢" 
+                            placeholder="CVV" 
                             maxLength="3"
                             value={sslCardCvv} 
                             onChange={(e) => setSslCardCvv(e.target.value)}
@@ -1001,5 +1001,6 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
     </div>
   );
 }
+
 
 

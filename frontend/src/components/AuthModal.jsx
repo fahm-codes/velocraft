@@ -116,7 +116,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, showToast })
             <input 
               type="password" 
               className="form-input" 
-              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+              placeholder="Password"
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               required 
@@ -166,4 +166,5 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, showToast })
     </div>
   );
 }
+
 
