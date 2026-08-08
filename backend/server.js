@@ -375,7 +375,7 @@ app.get('/api/crm/customers', authenticateToken, requireAdmin, (req, res) => {
 // CRM: Promote Customer to Admin
 app.put('/api/crm/customers/:id/role', authenticateToken, requireAdmin, (req, res) => {
   const { role } = req.body;
-  if (role !== 'admin' && role !== 'customer') {
+  if (role !== 'admin' && role !== 'customer' && role !== 'shopper') {
     return res.status(400).json({ error: 'Invalid role' });
   }
 
@@ -689,4 +689,5 @@ app.listen(PORT, () => {
   console.log(` Velocraft Server running on http://localhost:${PORT}`);
   console.log(`==================================================`);
 });
+
 

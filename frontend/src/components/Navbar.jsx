@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ShoppingCart, User, ShieldAlert, LogOut, Ticket, History, Car, ChevronDown } from 'lucide-react';
 
 export default function Navbar({ 
@@ -59,7 +59,7 @@ export default function Navbar({
           </div>
         </a>
 
-        {user && user.role === 'admin' && (
+        {user && (user.role === 'admin' || user.role === 'shopper') && (
           <button 
             className="btn btn-secondary" 
             style={{ 
@@ -71,7 +71,7 @@ export default function Navbar({
             onClick={() => setCurrentPage(currentPage === 'crm' ? 'catalog' : 'crm')}
           >
             <ShieldAlert size={15} />
-            <span>{currentPage === 'crm' ? 'Exit Portal' : 'CRM Portal'}</span>
+            <span>{currentPage === 'crm' ? 'Exit Portal' : (user.role === 'admin' ? 'CRM Portal' : 'Shopper Portal')}</span>
           </button>
         )}
 
@@ -130,3 +130,4 @@ export default function Navbar({
     </nav>
   );
 }
+
