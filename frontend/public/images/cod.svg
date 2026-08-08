@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <rect width="100" height="100" rx="15" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+  <!-- Delivery Truck -->
+  <path d="M15 35 L55 35 L55 75 L15 75 Z" fill="#e2e8f0" />
+  <path d="M55 45 L75 45 L85 60 L85 75 L55 75 Z" fill="#00f0ff" />
+  <!-- Wheels -->
+  <circle cx="32" cy="75" r="8" fill="#0f172a" stroke="#e2e8f0" stroke-width="2" />
+  <circle cx="68" cy="75" r="8" fill="#0f172a" stroke="#e2e8f0" stroke-width="2" />
+  <!-- Windshield -->
+  <polygon points="58,48 70,48 78,58 58,58" fill="#0f172a" />
+  <!-- COD text inside the truck body -->
+  <text x="21" y="60" font-family="Arial, sans-serif" font-weight="900" font-size="16" fill="#1e293b">COD</text>
+</svg>

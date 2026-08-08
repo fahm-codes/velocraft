@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80">
+  <rect width="300" height="80" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+  <!-- SSL text in blue-green -->
+  <text x="25" y="54" font-family="sans-serif" font-weight="900" font-size="36" fill="#00f0ff">SSL</text>
+  <!-- COMMERZ text in red-pink -->
+  <text x="98" y="54" font-family="sans-serif" font-weight="bold" font-size="34" fill="#f2235e">COMMERZ</text>
+  <!-- Security Shield -->
+  <path d="M260 25 C260 25 272 20 272 20 C272 20 284 25 284 25 C284 35 282 48 272 55 C262 48 260 35 260 25 Z" fill="#10b981"/>
+  <path d="M266 38 L270 42 L278 34" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

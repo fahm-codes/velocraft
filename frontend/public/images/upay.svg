@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <rect width="200" height="60" rx="10" fill="#005ca9"/>
+  <!-- upay circular arrow -->
+  <circle cx="42" cy="30" r="16" fill="#fdb813" />
+  <circle cx="42" cy="30" r="10" fill="#005ca9" />
+  <polygon points="42,14 48,20 36,20" fill="#fdb813" />
+  <!-- upay Text -->
+  <text x="75" y="40" font-family="Arial, sans-serif" font-weight="bold" font-size="28" fill="#fdb813">upay</text>
+</svg>

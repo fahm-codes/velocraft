@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <rect width="200" height="60" rx="10" fill="#8c348d"/>
+  <!-- Rocket icon -->
+  <path d="M40 18 L50 28 L32 46 L24 46 L24 38 Z" fill="#ffffff" />
+  <path d="M48 20 C56 12 60 12 60 12 C60 12 60 16 52 24 L44 32 Z" fill="#ff4d4d" />
+  <circle cx="44" cy="24" r="2.5" fill="#8c348d" />
+  <!-- Rocket Text -->
+  <text x="75" y="38" font-family="Arial, sans-serif" font-weight="bold" font-size="24" fill="#ffffff">rocket</text>
+</svg>

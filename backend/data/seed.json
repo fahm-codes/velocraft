@@ -1,0 +1,288 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "Velocraft Admin",
+      "email": "admin@velocraft.com",
+      "password": "$2a$10$oDTAbo6qe2biK5d2ueh3leYA.mL61/xU5PEqTXVNOZKGVfBB.eTpe",
+      "role": "admin"
+    },
+    {
+      "id": "u2",
+      "name": "Alex Mercer",
+      "email": "shopper@velocraft.com",
+      "password": "$2a$10$dCuqqhKgXC.oPM15B6KsRu1wgwGizAoI86shWxuNxh/U85GGYHCx2",
+      "role": "customer"
+    }
+  ],
+  "products": [
+    {
+      "id": "p1",
+      "name": "Porsche 911 GT3 RS (992)",
+      "brand": "Porsche",
+      "category": "Supercar",
+      "scale": "1:18",
+      "price": 149.99,
+      "stock": 8,
+      "imageUrl": "/images/porsche_gt3.jpg",
+      "description": "Exquisite 1:18 scale replica of the 992-generation Porsche 911 GT3 RS. Features openable doors, hood, detail-accurate flat-six engine bay, functional steering, and active rear wing replica."
+    },
+    {
+      "id": "p2",
+      "name": "Nissan Skyline GT-R (R34) Z-Tune",
+      "brand": "Nissan",
+      "category": "JDM",
+      "scale": "1:24",
+      "price": 89.99,
+      "stock": 15,
+      "imageUrl": "/images/skyline_r34.jpg",
+      "description": "Highly detailed 1:24 die-cast model of the legendary Nismo R34 GT-R Z-Tune in iconic Bayside Blue. Includes detailed RB26DETT engine replication and custom gold Nismo wheels."
+    },
+    {
+      "id": "p3",
+      "name": "Aston Martin DB5 (1964)",
+      "brand": "Aston Martin",
+      "category": "Classic",
+      "scale": "1:18",
+      "price": 129.99,
+      "stock": 4,
+      "imageUrl": "/images/aston_db5.jpg",
+      "description": "The ultimate classic spy car. This 1:18 replica of the 1964 Aston Martin DB5 features a metallic silver-birch finish, detailed wire wheels, and a replica luxurious leather-trimmed interior."
+    },
+    {
+      "id": "p4",
+      "name": "Shelby Mustang GT500 'Eleanor'",
+      "brand": "Ford",
+      "category": "Muscle",
+      "scale": "1:18",
+      "price": 119.99,
+      "stock": 3,
+      "imageUrl": "/images/mustang_gt500.jpg",
+      "description": "Stunning 1:18 scale model of the 1967 Shelby Mustang GT500 'Eleanor'. Finished in gunmetal grey with black racing stripes. High-quality die-cast metal with opening parts."
+    },
+    {
+      "id": "p5",
+      "name": "Ferrari LaFerrari",
+      "brand": "Ferrari",
+      "category": "Supercar",
+      "scale": "1:24",
+      "price": 99.99,
+      "stock": 12,
+      "imageUrl": "/images/ferrari_laferrari.jpg",
+      "description": "Officially licensed 1:24 scale replica of Ferrari's hybrid hypercar. Features opening butterfly doors, detailed hybrid powertrain visual, and signature Rosso Corsa paint job."
+    },
+    {
+      "id": "p6",
+      "name": "Toyota AE86 Trueno (Initial D)",
+      "brand": "Toyota",
+      "category": "JDM",
+      "scale": "1:24",
+      "price": 79.99,
+      "stock": 20,
+      "imageUrl": "/images/toyota_ae86.jpg",
+      "description": "1:24 scale model replica of the famous Fujiwara Tofu Shop AE86 Trueno. Includes the tofu delivery cup holder cup, pop-up headlights, and black-and-white panda livery."
+    },
+    {
+      "id": "p7",
+      "name": "Chevrolet Camaro Z28 (1969)",
+      "brand": "Chevrolet",
+      "category": "Muscle",
+      "scale": "1:24",
+      "price": 69.99,
+      "stock": 10,
+      "imageUrl": "/images/camaro_z28.jpg",
+      "description": "Aggressive 1:24 scale replica of the 1969 Chevrolet Camaro Z28. Authentic paint schemes, heavy diecast body, opening doors and hood revealing the detailed V8 engine."
+    },
+    {
+      "id": "p8",
+      "name": "Jaguar E-Type Roadster",
+      "brand": "Jaguar",
+      "category": "Classic",
+      "scale": "1:43",
+      "price": 49.99,
+      "stock": 7,
+      "imageUrl": "/images/jaguar_etype.jpg",
+      "description": "Charming 1:43 replica of the classic British Roadster, once called 'the most beautiful car ever made' by Enzo Ferrari. Detailed chrome spoke wheels and red leather trim."
+    }
+  ],
+  "orders": [
+    {
+      "id": "o1",
+      "userId": "u2",
+      "customerName": "Alex Mercer",
+      "customerEmail": "shopper@velocraft.com",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Porsche 911 GT3 RS (992)",
+          "brand": "Porsche",
+          "price": 149.99,
+          "quantity": 1,
+          "imageUrl": "/images/porsche_gt3.jpg"
+        },
+        {
+          "productId": "p6",
+          "name": "Toyota AE86 Trueno (Initial D)",
+          "brand": "Toyota",
+          "price": 79.99,
+          "quantity": 1,
+          "imageUrl": "/images/toyota_ae86.jpg"
+        }
+      ],
+      "totalAmount": 229.98,
+      "shippingAddress": {
+        "address": "123 drift circuit drive",
+        "city": "Tokyo",
+        "state": "Kanto",
+        "zipCode": "100-0001",
+        "country": "Japan"
+      },
+      "paymentMethod": "Credit Card (ending 4242)",
+      "status": "Shipped",
+      "createdAt": "2026-08-01T14:32:00.000Z"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "t1",
+      "userId": "u2",
+      "customerName": "Alex Mercer",
+      "customerEmail": "shopper@velocraft.com",
+      "subject": "AE86 pop-up lights query",
+      "message": "Hi, does the pop-up headlights on the 1:24 AE86 model have actual working LED lights or are they manual flip-up only?",
+      "status": "In Progress",
+      "createdAt": "2026-08-02T10:15:00.000Z",
+      "replies": [
+        {
+          "sender": "admin",
+          "message": "Hello Alex! The headlights are manual flip-up only. There are no LEDs installed in this specific model. However, the detailing inside the lenses is extremely realistic!",
+          "createdAt": "2026-08-02T12:00:00.000Z"
+        },
+        {
+          "sender": "customer",
+          "message": "Awesome, thanks for the quick reply. Manual flip-up is perfect!",
+          "createdAt": "2026-08-02T13:45:00.000Z"
+        }
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rdkgw3u2y4",
+      "productId": "p1",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 5,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Would buy again.",
+      "createdAt": "2026-07-18T09:19:26.399Z"
+    },
+    {
+      "id": "r30tbku83p",
+      "productId": "p2",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 5,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Would buy again.",
+      "createdAt": "2026-06-23T04:52:25.281Z"
+    },
+    {
+      "id": "rzpr0mdd4u",
+      "productId": "p2",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 5,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Fast delivery.",
+      "createdAt": "2026-06-01T18:40:54.993Z"
+    },
+    {
+      "id": "rib0hev5x7",
+      "productId": "p3",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 4,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Would buy again.",
+      "createdAt": "2026-08-06T22:12:33.650Z"
+    },
+    {
+      "id": "rpdql2fp42",
+      "productId": "p3",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 4,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Fast delivery.",
+      "createdAt": "2026-07-29T07:59:10.078Z"
+    },
+    {
+      "id": "rmi5funhxb",
+      "productId": "p4",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 4,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Would buy again.",
+      "createdAt": "2026-07-12T19:00:42.937Z"
+    },
+    {
+      "id": "r6x3f9kfqc",
+      "productId": "p5",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 5,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Would buy again.",
+      "createdAt": "2026-07-10T15:41:39.489Z"
+    },
+    {
+      "id": "r01ngskepe",
+      "productId": "p5",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 4,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Fast delivery.",
+      "createdAt": "2026-07-18T01:59:38.108Z"
+    },
+    {
+      "id": "rt2sblrq0z",
+      "productId": "p6",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 5,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Would buy again.",
+      "createdAt": "2026-07-12T12:20:33.681Z"
+    },
+    {
+      "id": "rn48ey7qca",
+      "productId": "p6",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 4,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Fast delivery.",
+      "createdAt": "2026-06-08T10:18:14.809Z"
+    },
+    {
+      "id": "r64chkub54",
+      "productId": "p7",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 5,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Would buy again.",
+      "createdAt": "2026-08-02T07:48:18.942Z"
+    },
+    {
+      "id": "rh6tinzp1l",
+      "productId": "p7",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 4,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Fast delivery.",
+      "createdAt": "2026-07-18T12:12:16.256Z"
+    },
+    {
+      "id": "rpvf7ms6t9",
+      "productId": "p8",
+      "userId": "u2",
+      "userName": "Alex Mercer",
+      "rating": 4,
+      "comment": "Amazing detail on this replica! Really satisfied with the quality. Would buy again.",
+      "createdAt": "2026-07-13T03:57:19.164Z"
+    }
+  ]
+}
