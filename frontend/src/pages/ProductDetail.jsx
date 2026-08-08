@@ -182,7 +182,7 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
               <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{product.category}</span>
             </div>
             <h1 style={{ fontSize: '2rem', marginBottom: '12px', lineHeight: '1.2' }}>{product.name}</h1>
-            <p className="product-price" style={{ fontSize: '2.2rem' }}>à§³ {product.price.toLocaleString()}</p>
+            <p className="product-price" style={{ fontSize: '2.2rem' }}>৳ {product.price.toLocaleString()}</p>
           </div>
 
           <div style={{
@@ -407,4 +407,5 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
     </div>
   );
 }
+
 

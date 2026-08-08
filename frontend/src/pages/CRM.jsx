@@ -428,7 +428,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                     <div className="glass-card metric-card" style={{ borderLeft: '4px solid var(--accent-cyan)' }}>
                       <span className="metric-title">Gross Revenue</span>
                       <span className="metric-val" style={{ color: 'var(--accent-cyan)' }}>
-                        à§³ {analytics.metrics.totalSales.toLocaleString()}
+                        ৳ {analytics.metrics.totalSales.toLocaleString()}
                       </span>
                     </div>
                     <div className="glass-card metric-card" style={{ borderLeft: '4px solid var(--accent-blue)' }}>
@@ -470,7 +470,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                                 <div className="chart-bar-wrapper">
                                   <div className="chart-bar-fill" style={{ width: `${percent}%` }}></div>
                                 </div>
-                                <div className="chart-value">à§³ {row.value.toLocaleString()}</div>
+                                <div className="chart-value">৳ {row.value.toLocaleString()}</div>
                               </div>
                             );
                           })
@@ -544,7 +544,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                                 ))}
                               </div>
                             </td>
-                            <td style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>à§³ {order.totalAmount.toLocaleString()}</td>
+                            <td style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>৳ {order.totalAmount.toLocaleString()}</td>
                             <td style={{ fontSize: '0.85rem' }}>{new Date(order.createdAt).toLocaleDateString()}</td>
                             <td>
                               <select 
@@ -604,7 +604,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                           <p className="product-desc" style={{ fontSize: '0.8rem', marginBottom: '16px' }}>{prod.description}</p>
                           
                           <div className="product-footer">
-                            <div className="product-price">à§³ {prod.price.toLocaleString()}</div>
+                            <div className="product-price">৳ {prod.price.toLocaleString()}</div>
                             <div style={{ display: 'flex', gap: '8px' }}>
                               <button 
                                 className="btn btn-secondary" 
@@ -654,7 +654,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                             <td style={{ fontWeight: '600' }}>{cust.name}</td>
                             <td>{cust.email}</td>
                             <td>{cust.orderCount} Orders</td>
-                            <td style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>à§³ {cust.totalSpent.toLocaleString()}</td>
+                            <td style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>৳ {cust.totalSpent.toLocaleString()}</td>
                             <td>
                               <button 
                                 className="btn btn-primary" 
@@ -863,7 +863,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div className="form-group">
-                  <label className="form-label">Retail Price (à§³)</label>
+                  <label className="form-label">Retail Price (৳)</label>
                   <input 
                     type="number" 
                     step="1" 
@@ -942,4 +942,5 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
     </div>
   );
 }
+
 
