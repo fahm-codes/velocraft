@@ -150,21 +150,10 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, showToast })
             {isRegister ? 'Login here' : 'Sign up here'}
           </button>
         </div>
-
-        <div style={{
-          marginTop: '16px',
-          paddingTop: '16px',
-          borderTop: '1px solid var(--border-color)',
-          fontSize: '0.75rem',
-          color: 'var(--text-muted)',
-          textAlign: 'center'
-        }}>
-          <strong>Demo Shopper:</strong> shopper@velocraft.com / shopper123<br />
-          <strong>Demo Admin:</strong> admin@velocraft.com / admin123
-        </div>
       </div>
     </div>
   );
 }
+
 
 
