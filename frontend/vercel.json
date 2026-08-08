@@ -1,8 +1,1 @@
-﻿{
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://velocraft-backend.onrender.com/api/:path*"
-    }
-  ]
-}
+﻿{"rewrites":[{"source":"/api/:path*","destination":"https://velocraft-backend.onrender.com/api/:path*"}]}
