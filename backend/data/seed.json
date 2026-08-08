@@ -3,14 +3,14 @@
     {
       "id": "u1",
       "name": "Velocraft Admin",
-      "email": "admin@velocraft.com",
+      "email": "fahm-codes@velocraft.com",
       "password": "$2a$10$oDTAbo6qe2biK5d2ueh3leYA.mL61/xU5PEqTXVNOZKGVfBB.eTpe",
       "role": "admin"
     },
     {
       "id": "u2",
       "name": "Alex Mercer",
-      "email": "shopper@velocraft.com",
+      "email": "fahmid@velocraft.com",
       "password": "$2a$10$dCuqqhKgXC.oPM15B6KsRu1wgwGizAoI86shWxuNxh/U85GGYHCx2",
       "role": "customer"
     }
@@ -110,7 +110,7 @@
       "id": "o1",
       "userId": "u2",
       "customerName": "Alex Mercer",
-      "customerEmail": "shopper@velocraft.com",
+      "customerEmail": "fahmid@velocraft.com",
       "items": [
         {
           "productId": "p1",
@@ -147,7 +147,7 @@
       "id": "t1",
       "userId": "u2",
       "customerName": "Alex Mercer",
-      "customerEmail": "shopper@velocraft.com",
+      "customerEmail": "fahmid@velocraft.com",
       "subject": "AE86 pop-up lights query",
       "message": "Hi, does the pop-up headlights on the 1:24 AE86 model have actual working LED lights or are they manual flip-up only?",
       "status": "In Progress",
@@ -286,3 +286,4 @@
     }
   ]
 }
+

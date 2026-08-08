@@ -6,6 +6,113 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const res = await apiFetch(`/api/orders/${orderId}/cancel`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to cancel order');
+      }
+
+      setOrders(prev =>
+        prev.map(order =>
+          order.id === orderId ? data : order
+        )
+      );
+
+      showToast('Order cancelled successfully', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast(err.message, 'error');
+    }
+  };
+
+  const handleReorder = async (orderId) => {
+    try {
+      const res = await apiFetch(`/api/orders/${orderId}/reorder`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to prepare reorder');
+      }
+
+      const existingCart = JSON.parse(localStorage.getItem('velocraft_cart') || '[]');
+
+      const mergedCart = [...existingCart];
+
+      data.items.forEach(item => {
+        const existing = mergedCart.find(
+          cartItem => cartItem.productId === item.productId
+        );
+
+        if (existing) {
+          existing.quantity += item.quantity;
+        } else {
+          mergedCart.push({
+            productId: item.productId,
+            name: item.name,
+            brand: item.brand,
+            category: item.category,
+            price: item.price,
+            imageUrl: item.imageUrl,
+            quantity: item.quantity
+          });
+        }
+      });
+
+      localStorage.setItem('velocraft_cart', JSON.stringify(mergedCart));
+
+      if (data.unavailable?.length) {
+        showToast(
+          `Some items unavailable: ${data.unavailable.join(', ')}`,
+          'error'
+        );
+      } else {
+        showToast('Previous order added to cart', 'success');
+      }
+
+      setCurrentPage('cart');
+    } catch (err) {
+      console.error(err);
+      showToast(err.message, 'error');
+    }
+  };
+
+  const handleConfirmReceived = async (orderId) => {
+    try {
+      const res = await apiFetch(`/api/orders/${orderId}/received`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to confirm delivery');
+      }
+
+      setOrders(prev =>
+        prev.map(order =>
+          order.id === orderId ? data : order
+        )
+      );
+
+      showToast('Order marked as received', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast(err.message, 'error');
+    }
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -116,6 +223,55 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
                 ))}
               </div>
 
+              {/* Shopper Order Actions */}
+              <div style={{
+                borderTop: '1px solid var(--border-color)',
+                paddingTop: '16px',
+                marginTop: '4px',
+                display: 'flex',
+                gap: '10px',
+                justifyContent: 'flex-end',
+                flexWrap: 'wrap'
+              }}>
+                {order.status === 'Pending' && (
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => handleCancelOrder(order.id)}
+                  >
+                    Cancel Order
+                  </button>
+                )}
+
+                {order.status === 'Delivered' && (
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => handleReorder(order.id)}
+                  >
+                    Reorder
+                  </button>
+                )}
+
+                {order.status === 'Delivered' && !order.receivedAt && (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleConfirmReceived(order.id)}
+                  >
+                    Confirm Received
+                  </button>
+                )}
+
+                {order.status === 'Delivered' && order.receivedAt && (
+                  <span style={{
+                    color: 'var(--accent-cyan)',
+                    fontSize: '0.85rem',
+                    fontWeight: '600',
+                    alignSelf: 'center'
+                  }}>
+                    ✓ Received
+                  </span>
+                )}
+              </div>
+
               {/* Order Footer summary */}
               <div style={{
                 borderTop: '1px solid var(--border-color)',
@@ -153,5 +309,7 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
     </div>
   );
 }
+
+
 
 

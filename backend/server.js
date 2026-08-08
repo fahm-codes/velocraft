@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -247,6 +247,103 @@ app.get('/api/orders/my-orders', authenticateToken, (req, res) => {
   res.json(userOrders);
 });
 
+
+// Cancel a shopper's own pending order
+app.put('/api/orders/:id/cancel', authenticateToken, (req, res) => {
+  const order = db.findById('orders', req.params.id);
+
+  if (!order || order.userId !== req.user.id) {
+    return res.status(404).json({ error: 'Order not found' });
+  }
+
+  if (order.status !== 'Pending') {
+    return res.status(400).json({
+      error: 'Only pending orders can be cancelled'
+    });
+  }
+
+  const products = db.get('products');
+
+  for (const item of order.items) {
+    const product = products.find(p => p.id === item.productId);
+    if (product) product.stock += item.quantity;
+  }
+
+  db.set('products', products);
+
+  const updatedOrder = db.update('orders', order.id, {
+    status: 'Cancelled'
+  });
+
+  res.json(updatedOrder);
+});
+
+// Confirm that a shopper received a delivered order
+app.put('/api/orders/:id/received', authenticateToken, (req, res) => {
+  const order = db.findById('orders', req.params.id);
+
+  if (!order || order.userId !== req.user.id) {
+    return res.status(404).json({ error: 'Order not found' });
+  }
+
+  if (order.status !== 'Delivered') {
+    return res.status(400).json({
+      error: 'Only delivered orders can be confirmed as received'
+    });
+  }
+
+  const updatedOrder = db.update('orders', order.id, {
+    receivedAt: new Date().toISOString()
+  });
+
+  res.json(updatedOrder);
+});
+
+// Prepare a previous order for reorder
+app.post('/api/orders/:id/reorder', authenticateToken, (req, res) => {
+  const order = db.findById('orders', req.params.id);
+
+  if (!order || order.userId !== req.user.id) {
+    return res.status(404).json({ error: 'Order not found' });
+  }
+
+  const products = db.get('products');
+  const unavailable = [];
+  const items = [];
+
+  for (const item of order.items) {
+    const product = products.find(p => p.id === item.productId);
+
+    if (!product || product.stock < item.quantity) {
+      unavailable.push(product?.name || item.name);
+      continue;
+    }
+
+    items.push({
+      productId: product.id,
+      name: product.name,
+      brand: product.brand,
+      category: product.category,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      quantity: item.quantity
+    });
+  }
+
+  if (items.length === 0) {
+    return res.status(400).json({
+      error: 'None of the items from this order are currently available'
+    });
+  }
+
+  res.json({
+    items,
+    unavailable,
+    message: unavailable.length
+      ? 'Some items are currently unavailable'
+      : 'Order ready to reorder'
+  });
+});
 // --- CRM SYSTEM ENDPOINTS (ADMIN READ/WRITE) ---
 
 // CRM: Customer Profiles
@@ -592,3 +689,4 @@ app.listen(PORT, () => {
   console.log(` Velocraft Server running on http://localhost:${PORT}`);
   console.log(`==================================================`);
 });
+
