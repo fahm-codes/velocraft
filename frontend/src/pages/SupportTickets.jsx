@@ -1,3 +1,4 @@
+﻿import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import { Ticket, Send, CheckCircle, HelpCircle, MessageSquare, AlertCircle } from 'lucide-react';
 
@@ -12,7 +13,7 @@ export default function SupportTickets({ token, showToast }) {
 
   const fetchTickets = async () => {
     try {
-      const res = await fetch('/api/tickets/my-tickets', {
+      const res = await apiFetch('/api/tickets/my-tickets', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) throw new Error('Failed to retrieve support tickets');
@@ -45,7 +46,7 @@ export default function SupportTickets({ token, showToast }) {
 
     setSubmitting(true);
     try {
-      const res = await fetch('/api/tickets', {
+      const res = await apiFetch('/api/tickets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ export default function SupportTickets({ token, showToast }) {
     if (!replyText.trim()) return;
 
     try {
-      const res = await fetch(`/api/tickets/${activeTicket.id}/reply`, {
+      const res = await apiFetch(`/api/tickets/${activeTicket.id}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -292,3 +293,4 @@ export default function SupportTickets({ token, showToast }) {
     </div>
   );
 }
+

@@ -1,3 +1,4 @@
+﻿import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle2, CreditCard, ShoppingBag, Landmark, Smartphone, ShieldCheck, Lock, Check, Truck } from 'lucide-react';
 
@@ -141,7 +142,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
         paymentMethod: paymentMethodDetails
       };
 
-      const res = await fetch('/api/orders', {
+      const res = await apiFetch('/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -557,7 +558,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                     <input 
                       type="password" 
                       className="form-input" 
-                      placeholder="•••" 
+                      placeholder="â€¢â€¢â€¢" 
                       value={cardCvv}
                       onChange={(e) => setCardCvv(e.target.value)}
                       maxLength="4"
@@ -584,7 +585,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                   <Truck size={18} style={{ color: 'var(--accent-cyan)' }} />
                   <span>Cash on Delivery Selected</span>
                 </div>
-                <span>You will pay the total amount of <strong>৳ {total.toLocaleString()}</strong> to the courier agent when the parcel is delivered.</span>
+                <span>You will pay the total amount of <strong>à§³ {total.toLocaleString()}</strong> to the courier agent when the parcel is delivered.</span>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>* Notice: All Cash on Delivery orders require a brief phone confirmation from our customer service team before processing.</span>
               </div>
             )}
@@ -606,7 +607,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                     <span style={{ color: 'var(--accent-cyan)', fontWeight: 'bold' }}>{item.quantity}x</span>
                     <span style={{ color: 'var(--text-secondary)' }}>{item.name}</span>
                   </div>
-                  <span>৳ {item.price.toLocaleString()}</span>
+                  <span>à§³ {item.price.toLocaleString()}</span>
                 </div>
               ))}
             </div>
@@ -614,11 +615,11 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '16px', marginBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                 <span>Subtotal</span>
-                <span>৳ {subtotal.toLocaleString()}</span>
+                <span>à§³ {subtotal.toLocaleString()}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                 <span>Delivery</span>
-                <span>{shipping === 0 ? 'FREE' : `৳ ${shipping.toLocaleString()}`}</span>
+                <span>{shipping === 0 ? 'FREE' : `à§³ ${shipping.toLocaleString()}`}</span>
               </div>
             </div>
 
@@ -632,7 +633,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
             }}>
               <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>Total Due</span>
               <span style={{ fontStyle: 'normal', fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-cyan)' }}>
-                ৳ {total.toLocaleString()}
+                à§³ {total.toLocaleString()}
               </span>
             </div>
 
@@ -707,7 +708,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                 <div style={{ borderTop: '1px solid #cbd5e1', paddingTop: '16px' }}>
                   <span style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 'bold' }}>Total Payable</span>
                   <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#f2235e', marginTop: '4px' }}>
-                    ৳ {total.toLocaleString()}
+                    à§³ {total.toLocaleString()}
                   </div>
                 </div>
               </div>
@@ -799,7 +800,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                           <input 
                             type="password" 
                             className="form-input" 
-                            placeholder="•••" 
+                            placeholder="â€¢â€¢â€¢" 
                             maxLength="3"
                             value={sslCardCvv} 
                             onChange={(e) => setSslCardCvv(e.target.value)}
@@ -821,7 +822,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                           onClick={handleSslPay}
                           style={{ width: '60%', background: '#10b981', color: '#fff', border: 'none' }}
                         >
-                          Pay Now ৳ {total.toLocaleString()}
+                          Pay Now à§³ {total.toLocaleString()}
                         </button>
                       </div>
                     </div>
@@ -934,7 +935,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                           onClick={handleSslPay}
                           style={{ width: '60%', background: '#10b981', color: '#fff', border: 'none' }}
                         >
-                          {sslOtpStep === 1 ? 'Next Step' : sslOtpStep === 2 ? 'Confirm OTP' : `Pay ৳ ${total.toLocaleString()}`}
+                          {sslOtpStep === 1 ? 'Next Step' : sslOtpStep === 2 ? 'Confirm OTP' : `Pay à§³ ${total.toLocaleString()}`}
                         </button>
                       </div>
                     </div>
@@ -1000,3 +1001,4 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
     </div>
   );
 }
+

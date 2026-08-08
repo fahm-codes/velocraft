@@ -1,3 +1,4 @@
+﻿import { apiFetch } from '../api';
 import React, { useState } from 'react';
 import { X, LogIn, UserPlus } from 'lucide-react';
 
@@ -26,7 +27,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, showToast })
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
       const payload = isRegister ? { name, email, password } : { email, password };
 
-      const response = await fetch(endpoint, {
+      const response = await apiFetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -115,7 +116,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, showToast })
             <input 
               type="password" 
               className="form-input" 
-              placeholder="••••••••"
+              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               required 
@@ -165,3 +166,4 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, showToast })
     </div>
   );
 }
+

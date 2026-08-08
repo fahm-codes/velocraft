@@ -1,3 +1,4 @@
+﻿import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
 import { ArrowLeft, ShoppingCart, ShieldCheck, AlertCircle, MessageSquare, Star, Send } from 'lucide-react';
@@ -19,7 +20,7 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
 
   const fetchProductDetails = async () => {
     try {
-      const res = await fetch(`/api/products/${productId}`);
+      const res = await apiFetch(`/api/products/${productId}`);
       if (!res.ok) throw new Error('Product details not found');
       const data = await res.json();
       setProduct(data);
@@ -32,7 +33,7 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
 
   const fetchReviews = async () => {
     try {
-      const res = await fetch(`/api/products/${productId}/reviews`);
+      const res = await apiFetch(`/api/products/${productId}/reviews`);
       if (!res.ok) throw new Error('Failed to load reviews');
       const data = await res.json();
       setReviews(data);
@@ -83,7 +84,7 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
 
     setSubmittingReview(true);
     try {
-      const res = await fetch(`/api/products/${productId}/reviews`, {
+      const res = await apiFetch(`/api/products/${productId}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -181,7 +182,7 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
               <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{product.category}</span>
             </div>
             <h1 style={{ fontSize: '2rem', marginBottom: '12px', lineHeight: '1.2' }}>{product.name}</h1>
-            <p className="product-price" style={{ fontSize: '2.2rem' }}>৳ {product.price.toLocaleString()}</p>
+            <p className="product-price" style={{ fontSize: '2.2rem' }}>à§³ {product.price.toLocaleString()}</p>
           </div>
 
           <div style={{
@@ -346,11 +347,11 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
                     onChange={(e) => setNewRating(parseInt(e.target.value))}
                     style={{ background: 'var(--bg-card)' }}
                   >
-                    <option value="5">⭐⭐⭐⭐⭐ (5 - Exceptional)</option>
-                    <option value="4">⭐⭐⭐⭐ (4 - Very Good)</option>
-                    <option value="3">⭐⭐⭐ (3 - Average)</option>
-                    <option value="2">⭐⭐ (2 - Subpar)</option>
-                    <option value="1">⭐ (1 - Damaged/Poor)</option>
+                    <option value="5">â­â­â­â­â­ (5 - Exceptional)</option>
+                    <option value="4">â­â­â­â­ (4 - Very Good)</option>
+                    <option value="3">â­â­â­ (3 - Average)</option>
+                    <option value="2">â­â­ (2 - Subpar)</option>
+                    <option value="1">â­ (1 - Damaged/Poor)</option>
                   </select>
                 </div>
 
@@ -406,3 +407,4 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
     </div>
   );
 }
+

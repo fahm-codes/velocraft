@@ -1,3 +1,4 @@
+﻿import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
 import { 
@@ -47,31 +48,31 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       // Load analytics
-      const anaRes = await fetch('/api/crm/analytics', { headers });
+      const anaRes = await apiFetch('/api/crm/analytics', { headers });
       if (!anaRes.ok) throw new Error('Failed to load analytics dashboard');
       const anaData = await anaRes.json();
       setAnalytics(anaData);
 
       // Load orders
-      const ordRes = await fetch('/api/crm/orders', { headers });
+      const ordRes = await apiFetch('/api/crm/orders', { headers });
       if (!ordRes.ok) throw new Error('Failed to load orders');
       const ordData = await ordRes.json();
       setOrders(ordData);
 
       // Load products catalog
-      const prodRes = await fetch('/api/products');
+      const prodRes = await apiFetch('/api/products');
       if (!prodRes.ok) throw new Error('Failed to load products');
       const prodData = await prodRes.json();
       setProducts(prodData);
 
       // Load customer profiles
-      const custRes = await fetch('/api/crm/customers', { headers });
+      const custRes = await apiFetch('/api/crm/customers', { headers });
       if (!custRes.ok) throw new Error('Failed to load customer profiles');
       const custData = await custRes.json();
       setCustomers(custData);
 
       // Load tickets
-      const tickRes = await fetch('/api/crm/tickets', { headers });
+      const tickRes = await apiFetch('/api/crm/tickets', { headers });
       if (!tickRes.ok) throw new Error('Failed to load support tickets');
       const tickData = await tickRes.json();
       setTickets(tickData);
@@ -96,7 +97,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
   // Update Order Status
   const handleOrderStatusChange = async (orderId, newStatus) => {
     try {
-      const res = await fetch(`/api/crm/orders/${orderId}`, {
+      const res = await apiFetch(`/api/crm/orders/${orderId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +120,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
     }
     
     try {
-      const res = await fetch(`/api/crm/customers/${userId}/role`, {
+      const res = await apiFetch(`/api/crm/customers/${userId}/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -174,7 +175,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
 
     try {
       showToast('Uploading image...', 'info');
-      const res = await fetch('/api/products/upload', {
+      const res = await apiFetch('/api/products/upload', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -231,7 +232,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
       const url = editingProduct ? `/api/crm/products/${editingProduct.id}` : '/api/crm/products';
       const method = editingProduct ? 'PUT' : 'POST';
 
-      const res = await fetch(url, {
+      const res = await apiFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -256,7 +257,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
     if (!window.confirm('Are you sure you want to delete this replica product from the public catalog?')) return;
 
     try {
-      const res = await fetch(`/api/crm/products/${productId}`, {
+      const res = await apiFetch(`/api/crm/products/${productId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -275,7 +276,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
     if (!adminReplyText.trim()) return;
 
     try {
-      const res = await fetch(`/api/tickets/${activeTicket.id}/reply`, {
+      const res = await apiFetch(`/api/tickets/${activeTicket.id}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -298,7 +299,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
   // Resolve Ticket
   const handleResolveTicket = async () => {
     try {
-      const res = await fetch(`/api/crm/tickets/${activeTicket.id}/resolve`, {
+      const res = await apiFetch(`/api/crm/tickets/${activeTicket.id}/resolve`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -427,7 +428,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                     <div className="glass-card metric-card" style={{ borderLeft: '4px solid var(--accent-cyan)' }}>
                       <span className="metric-title">Gross Revenue</span>
                       <span className="metric-val" style={{ color: 'var(--accent-cyan)' }}>
-                        ৳ {analytics.metrics.totalSales.toLocaleString()}
+                        à§³ {analytics.metrics.totalSales.toLocaleString()}
                       </span>
                     </div>
                     <div className="glass-card metric-card" style={{ borderLeft: '4px solid var(--accent-blue)' }}>
@@ -469,7 +470,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                                 <div className="chart-bar-wrapper">
                                   <div className="chart-bar-fill" style={{ width: `${percent}%` }}></div>
                                 </div>
-                                <div className="chart-value">৳ {row.value.toLocaleString()}</div>
+                                <div className="chart-value">à§³ {row.value.toLocaleString()}</div>
                               </div>
                             );
                           })
@@ -543,7 +544,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                                 ))}
                               </div>
                             </td>
-                            <td style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>৳ {order.totalAmount.toLocaleString()}</td>
+                            <td style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>à§³ {order.totalAmount.toLocaleString()}</td>
                             <td style={{ fontSize: '0.85rem' }}>{new Date(order.createdAt).toLocaleDateString()}</td>
                             <td>
                               <select 
@@ -603,7 +604,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                           <p className="product-desc" style={{ fontSize: '0.8rem', marginBottom: '16px' }}>{prod.description}</p>
                           
                           <div className="product-footer">
-                            <div className="product-price">৳ {prod.price.toLocaleString()}</div>
+                            <div className="product-price">à§³ {prod.price.toLocaleString()}</div>
                             <div style={{ display: 'flex', gap: '8px' }}>
                               <button 
                                 className="btn btn-secondary" 
@@ -653,7 +654,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                             <td style={{ fontWeight: '600' }}>{cust.name}</td>
                             <td>{cust.email}</td>
                             <td>{cust.orderCount} Orders</td>
-                            <td style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>৳ {cust.totalSpent.toLocaleString()}</td>
+                            <td style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>à§³ {cust.totalSpent.toLocaleString()}</td>
                             <td>
                               <button 
                                 className="btn btn-primary" 
@@ -862,7 +863,7 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div className="form-group">
-                  <label className="form-label">Retail Price (৳)</label>
+                  <label className="form-label">Retail Price (à§³)</label>
                   <input 
                     type="number" 
                     step="1" 
@@ -941,3 +942,4 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
     </div>
   );
 }
+

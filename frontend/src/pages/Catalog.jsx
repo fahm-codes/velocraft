@@ -1,3 +1,4 @@
+﻿import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
 import { Search, SlidersHorizontal, AlertCircle, ChevronDown, ArrowUpDown } from 'lucide-react';
@@ -57,7 +58,7 @@ export default function Catalog({ onSelectProduct, addToCart, showToast }) {
       if (category && category !== 'All') params.append('category', category);
       if (scale && scale !== 'All') params.append('scale', scale);
 
-      const res = await fetch(`/api/products?${params.toString()}`);
+      const res = await apiFetch(`/api/products?${params.toString()}`);
       if (!res.ok) throw new Error('Failed to fetch products');
       const data = await res.json();
       // Apply client-side sorting
@@ -274,10 +275,10 @@ export default function Catalog({ onSelectProduct, addToCart, showToast }) {
                 }}
               >
                 <option value="default">Default Order</option>
-                <option value="price-asc">Price: Low → High</option>
-                <option value="price-desc">Price: High → Low</option>
-                <option value="name-az">Name: A → Z</option>
-                <option value="name-za">Name: Z → A</option>
+                <option value="price-asc">Price: Low â†’ High</option>
+                <option value="price-desc">Price: High â†’ Low</option>
+                <option value="name-az">Name: A â†’ Z</option>
+                <option value="name-za">Name: Z â†’ A</option>
               </select>
             </div>
           </div>
@@ -352,7 +353,7 @@ export default function Catalog({ onSelectProduct, addToCart, showToast }) {
                       </h3>
 
                       <div className="product-footer" style={{ marginTop: '12px' }}>
-                        <div className="product-price">৳ {product.price.toLocaleString()}</div>
+                        <div className="product-price">à§³ {product.price.toLocaleString()}</div>
                         
                         {isOutOfStock ? (
                           <span className="badge badge-danger">Out of stock</span>
@@ -384,3 +385,4 @@ export default function Catalog({ onSelectProduct, addToCart, showToast }) {
     </div>
   );
 }
+

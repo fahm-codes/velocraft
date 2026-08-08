@@ -1,3 +1,4 @@
+﻿import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Box, Truck, CheckSquare, Calendar, CreditCard } from 'lucide-react';
 
@@ -8,7 +9,7 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch('/api/orders/my-orders', {
+        const res = await apiFetch('/api/orders/my-orders', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!res.ok) throw new Error('Failed to load order history');
@@ -110,7 +111,7 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
                         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{item.brand}</div>
                       </div>
                     </div>
-                    <span style={{ fontWeight: '500' }}>৳ {(item.price * item.quantity).toLocaleString()}</span>
+                    <span style={{ fontWeight: '500' }}>à§³ {(item.price * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -140,7 +141,7 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
                   <div>
                     <span style={{ fontSize: '0.9rem' }}>Amount Charged:</span>{' '}
                     <strong style={{ fontSize: '1.25rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>
-                      ৳ {order.totalAmount.toLocaleString()}
+                      à§³ {order.totalAmount.toLocaleString()}
                     </strong>
                   </div>
                 </div>
@@ -152,3 +153,4 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
     </div>
   );
 }
+
