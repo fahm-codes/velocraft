@@ -52,6 +52,32 @@ function requireAdmin(req, res, next) {
   }
 }
 
+// Ensure demo accounts always exist with the correct credentials
+function ensureDemoAccounts() {
+  const adminHash = '$2a$10$4RY9K7h3bk5PdJrmR70e7eTt4an0H19XxY/GNVbRy4XRg.EcrDJfO';
+  const shopperHash = '$2a$10$hZAZzm7EnvYScAA/jg01WOeEMjoGgps09Ur5bqyIG6714FY3Ub2/e';
+
+  const users = db.get('users');
+
+  const admin = users.find(u => u.email.toLowerCase() === 'fahm-codes@velocraft.com');
+  if (admin) {
+    admin.password = adminHash;
+    admin.role = 'admin';
+    admin.name = 'Velocraft Admin';
+  }
+
+  const shopper = users.find(u => u.email.toLowerCase() === 'fahmid@velocraft.com');
+  if (shopper) {
+    shopper.password = shopperHash;
+    shopper.role = 'shopper';
+    shopper.name = 'Fahmid Hasan Sunny';
+  }
+
+  db.set('users', users);
+  console.log('Demo accounts synchronized.');
+}
+
+ensureDemoAccounts();
 // --- AUTHENTICATION ENDPOINTS ---
 
 // Register User
@@ -689,5 +715,6 @@ app.listen(PORT, () => {
   console.log(` Velocraft Server running on http://localhost:${PORT}`);
   console.log(`==================================================`);
 });
+
 
 
