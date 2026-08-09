@@ -218,10 +218,10 @@ h1, h2, h3, h4, h5, h6 {
 .form-input {
   width: 100%;
   padding: 12px 16px;
-  background: rgba(10, 11, 13, 0.8);
-  border: 1px solid var(--border-color);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
   border-radius: 8px;
-  color: var(--text-primary);
+  color: #111111;
   font-family: var(--font-sans);
   font-size: 0.95rem;
   transition: var(--transition-smooth);
@@ -229,23 +229,22 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-input:focus {
   outline: none;
-  border-color: var(--border-focus);
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  border-color: var(--accent-red);
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.1);
 }
 
 .form-select {
   width: 100%;
   padding: 12px 16px;
-  background: #12141c;
-  border: 1px solid var(--border-color);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
   border-radius: 8px;
-  color: var(--text-primary);
+  color: #111111;
   font-family: var(--font-sans);
   font-size: 0.95rem;
-  transition: var(--transition-smooth);
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 16px center;
   background-size: 16px;
@@ -260,7 +259,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Header Navigation Bar */
 .navbar {
   position: fixed;
-  top: 0;
+  top: 34px;
   left: 0;
   right: 0;
   height: 70px;
@@ -675,9 +674,10 @@ h1, h2, h3, h4, h5, h6 {
   gap: 12px;
   padding: 16px 24px;
   border-radius: 12px;
-  background: #161824;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: #ffffff;
+  color: #111111;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -765,10 +765,28 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
   }
   40% {
-    transform: translateY(-8px);
+    transform: translateY(-20px);
   }
   60% {
-    transform: translateY(-4px);
+    transform: translateY(-10px);
+  }
+}
+
+/* Navbar Cruiser Animation */
+@keyframes driveAcross {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(110vw);
+    opacity: 0;
   }
 }
 

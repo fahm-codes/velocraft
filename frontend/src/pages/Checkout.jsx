@@ -1,4 +1,4 @@
-﻿import { apiFetch } from '../api';
+import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle2, CreditCard, ShoppingBag, Landmark, Smartphone, ShieldCheck, Lock, Check, Truck } from 'lucide-react';
 
@@ -44,18 +44,38 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
 
   const [loading, setLoading] = useState(false);
 
+  // Promo / Coupon
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedDiscount, setAppliedDiscount] = useState(0);
+  const [isFreeShipping, setIsFreeShipping] = useState(false);
+
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   
   let shipping = 0;
-  if (paymentType === 'cod') {
-    if (state.toLowerCase() === 'dhaka') {
-      shipping = 130; // 80 delivery + 50 safety charge
-    } else {
-      shipping = 200; // 150 delivery + 50 safety charge
+  if (!isFreeShipping) {
+    if (paymentType === 'cod') {
+      if (state.toLowerCase() === 'dhaka') {
+        shipping = 130; // 80 delivery + 50 safety charge
+      } else {
+        shipping = 200; // 150 delivery + 50 safety charge
+      }
     }
   }
 
-  const total = subtotal + shipping;
+  const discountAmount = subtotal * appliedDiscount;
+  const total = (subtotal - discountAmount) + shipping;
+
+  const handleApplyCoupon = () => {
+    if (couponCode.toUpperCase() === 'SUPER10') {
+      setAppliedDiscount(0.10); // 10% off
+      setIsFreeShipping(true);
+      showToast('SUPER10 applied! 10% off and Free Delivery.', 'success');
+    } else {
+      setAppliedDiscount(0);
+      setIsFreeShipping(false);
+      showToast('Invalid or expired promo code.', 'error');
+    }
+  };
 
   // Load default address from profile on mount
   useEffect(() => {
@@ -612,14 +632,41 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
               ))}
             </div>
 
+            {/* Promo Code UI */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+              <input 
+                type="text" 
+                placeholder="Promo Code (Try 'SUPER10')"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                className="form-input"
+                style={{ padding: '8px 12px' }}
+              />
+              <button 
+                onClick={handleApplyCoupon}
+                className="btn btn-secondary"
+                style={{ padding: '8px 16px', whiteSpace: 'nowrap' }}
+              >
+                Apply
+              </button>
+            </div>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '16px', marginBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                 <span>Subtotal</span>
                 <span>৳ {subtotal.toLocaleString()}</span>
               </div>
+              {appliedDiscount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--accent-red)' }}>
+                  <span>Discount ({appliedDiscount * 100}%)</span>
+                  <span>- ৳ {discountAmount.toLocaleString()}</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                 <span>Delivery</span>
-                <span>{shipping === 0 ? 'FREE' : `৳ ${shipping.toLocaleString()}`}</span>
+                <span style={{ color: isFreeShipping ? 'var(--accent-green)' : 'inherit', fontWeight: isFreeShipping ? 'bold' : 'normal' }}>
+                  {isFreeShipping ? 'FREE' : `৳ ${shipping.toLocaleString()}`}
+                </span>
               </div>
             </div>
 

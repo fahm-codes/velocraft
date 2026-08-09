@@ -268,8 +268,25 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
                           e.target.style.display = 'none';
                         }} 
                       />
-                      {/* Real Image representation overlaying fallback vector if needed */}
-                      <div className="product-tag">
+                      {/* Promo SALE Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        left: '12px',
+                        background: 'var(--accent-red)',
+                        color: '#fff',
+                        padding: '4px 10px',
+                        borderRadius: '4px',
+                        fontWeight: 'bold',
+                        fontSize: '0.75rem',
+                        boxShadow: '0 4px 10px rgba(255, 0, 85, 0.3)',
+                        zIndex: 2,
+                        letterSpacing: '0.5px'
+                      }}>
+                        10.10 SALE
+                      </div>
+                      
+                      <div className="product-tag" style={{ right: '12px', left: 'auto' }}>
                         <span className="badge badge-info">{product.scale}</span>
                       </div>
 
