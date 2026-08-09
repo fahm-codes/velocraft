@@ -182,7 +182,11 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
       setCurrentPage('orders');
     } catch (err) {
       console.error(err);
-      showToast(err.message, 'error');
+      if (err.message.toLowerCase().includes('token') || err.message.toLowerCase().includes('unauthorized')) {
+        showToast('Session expired. Please sign out and sign back in to continue.', 'error');
+      } else {
+        showToast(err.message, 'error');
+      }
     } finally {
       setLoading(false);
       setShowSslPortal(false);

@@ -82,6 +82,14 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
     fetchProducts();
   }, [globalSearchQuery, category, scale, sortBy]);
 
+  // Automatic Hero Carousel Timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev === 0 ? 1 : 0));
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   const handleScrollDown = () => {
     const el = document.getElementById('catalog-explore-section');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -93,40 +101,53 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
   return (
     <div className="animate-fade-in">
       
-      {/* Cinematic Image Hero Banner */}
+      {/* Cinematic Image Hero Banner & Campaign Carousel */}
       <header style={{ position: 'relative', width: '100%', height: '500px', overflow: 'hidden', borderRadius: '24px', marginBottom: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', background: '#111' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+        
+        {/* Slide 0: Supercar Brand */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0,
+          opacity: activeSlide === 0 ? 1 : 0, transition: 'opacity 1s ease-in-out'
+        }}>
           <img 
             src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2069&auto=format&fit=crop" 
             alt="Hero Background"
             style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.5)' }}
           />
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px' }}>
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', textShadow: '0 4px 20px rgba(0,0,0,0.6)', color: '#ffffff' }}>
+              PRECISION IN MOTION
+            </h1>
+            <p style={{ fontSize: '1.1rem', maxWidth: '600px', marginBottom: '32px', textShadow: '0 2px 10px rgba(0,0,0,0.6)', color: '#ffffff', lineHeight: '1.6' }}>
+              Experience the thrill of motorsport engineering with our premium die-cast replicas. Crafted for true automotive enthusiasts.
+            </p>
+            <button className="btn btn-primary" style={{ padding: '14px 36px', fontSize: '1.1rem', borderRadius: '30px' }} onClick={handleScrollDown}>
+              Explore Collection
+            </button>
+          </div>
         </div>
+
+        {/* Slide 1: Promo Campaign */}
         <div style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          zIndex: 1,
-          color: '#fff',
-          padding: '24px'
+          position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0,
+          opacity: activeSlide === 1 ? 1 : 0, transition: 'opacity 1s ease-in-out'
         }}>
-          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', textShadow: '0 4px 20px rgba(0,0,0,0.6)', color: '#ffffff' }}>
-            PRECISION IN MOTION
-          </h1>
-          <p style={{ fontSize: '1.1rem', maxWidth: '600px', marginBottom: '32px', textShadow: '0 2px 10px rgba(0,0,0,0.6)', color: '#ffffff', lineHeight: '1.6' }}>
-            Experience the thrill of motorsport engineering with our premium die-cast replicas. Crafted for true automotive enthusiasts.
-          </p>
-          <button 
-            className="btn btn-primary" 
-            style={{ padding: '14px 36px', fontSize: '1.1rem', borderRadius: '30px' }}
-            onClick={handleScrollDown}
-          >
-            Explore Collection
-          </button>
+          <img 
+            src="https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=2000&auto=format&fit=crop" 
+            alt="Campaign Background"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.3)' }}
+          />
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px' }}>
+            <h1 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: '900', marginBottom: '16px', letterSpacing: '-0.02em', textShadow: '0 4px 20px rgba(255,0,0,0.8)', color: '#ff2a5f' }}>
+              10.10 SUPER SALE
+            </h1>
+            <p style={{ fontSize: '1.25rem', maxWidth: '700px', marginBottom: '32px', textShadow: '0 2px 10px rgba(0,0,0,0.8)', color: '#ffffff', lineHeight: '1.6', fontWeight: '500' }}>
+              The biggest event of the year is here. Use promo code <strong style={{ color: 'var(--accent-cyan)' }}>SUPER10</strong> for 10% off your entire order plus absolutely FREE Delivery!
+            </p>
+            <button className="btn btn-primary" style={{ padding: '14px 36px', fontSize: '1.1rem', borderRadius: '30px', background: 'var(--accent-red)', borderColor: 'var(--accent-red)' }} onClick={handleScrollDown}>
+              Shop The Sale Now
+            </button>
+          </div>
         </div>
       </header>
 

@@ -141,39 +141,9 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* GLOBAL PROMO BANNER WITH ANIMATED CAR */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '34px',
-        background: 'linear-gradient(90deg, var(--accent-red), #ff4d4d)',
-        color: '#fff',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '0.8rem',
-        fontWeight: 'bold',
-        zIndex: 1000,
-        overflow: 'hidden'
-      }}>
-        <span>🔥 10.10 SUPER SALE! Use code SUPER10 for 10% off & Free Delivery! 🔥</span>
-        <div style={{
-          position: 'absolute',
-          left: 0,
-          animation: 'driveAcross 8s linear infinite',
-          display: 'flex',
-          alignItems: 'center'
-        }}>
-          <Car size={18} fill="#fff" style={{ transform: 'scaleX(-1)' }} />
-        </div>
-      </div>
-
-      <div style={{ marginTop: '34px' }}>
-        <Navbar 
-          user={user} 
-          cart={cart}
+      <Navbar 
+        user={user} 
+        cart={cart}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         onLogout={handleLogout}
@@ -184,7 +154,6 @@ export default function App() {
           if (currentPage !== 'catalog') setCurrentPage('catalog');
         }}
       />
-      </div>
 
       <main className="main-content">
         {/* Render pages depending on active tab state */}
