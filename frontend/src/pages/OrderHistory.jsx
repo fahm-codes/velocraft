@@ -1,6 +1,6 @@
-﻿import { apiFetch } from '../api';
+import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Box, Truck, CheckSquare, Calendar, CreditCard } from 'lucide-react';
+import { ShoppingBag, Box, Truck, CheckSquare, Calendar, CreditCard, Star, XCircle } from 'lucide-react';
 
 export default function OrderHistory({ token, setCurrentPage, showToast }) {
   const [orders, setOrders] = useState([]);
@@ -164,8 +164,47 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
     <div className="animate-fade-in" style={{ marginTop: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <h1 style={{ fontSize: '2rem', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
         <ShoppingBag size={28} style={{ color: 'var(--accent-cyan)' }} />
-        <span>Your Purchase Ledger</span>
+        <span>My Orders</span>
       </h1>
+
+      {/* --- DARAZ STYLE ORDER STATUS GRID --- */}
+      <div className="glass-card" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', padding: '16px 20px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <CreditCard size={24} style={{ color: 'var(--text-secondary)' }} />
+          <span style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-secondary)' }}>To Pay</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <div style={{ position: 'relative' }}>
+            <Box size={24} style={{ color: 'var(--text-secondary)' }} />
+            {orders.filter(o => o.status === 'Processing').length > 0 && (
+              <span style={{ position: 'absolute', top: -6, right: -8, background: 'var(--accent-red)', color: '#fff', fontSize: '0.6rem', padding: '2px 6px', borderRadius: '10px', fontWeight: 'bold' }}>
+                {orders.filter(o => o.status === 'Processing').length}
+              </span>
+            )}
+          </div>
+          <span style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-secondary)' }}>To Ship</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <div style={{ position: 'relative' }}>
+            <Truck size={24} style={{ color: 'var(--text-secondary)' }} />
+            {orders.filter(o => o.status === 'Shipped').length > 0 && (
+              <span style={{ position: 'absolute', top: -6, right: -8, background: 'var(--accent-red)', color: '#fff', fontSize: '0.6rem', padding: '2px 6px', borderRadius: '10px', fontWeight: 'bold' }}>
+                {orders.filter(o => o.status === 'Shipped').length}
+              </span>
+            )}
+          </div>
+          <span style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-secondary)' }}>To Receive</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <Star size={24} style={{ color: 'var(--text-secondary)' }} />
+          <span style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-secondary)' }}>To Review</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <XCircle size={24} style={{ color: 'var(--text-secondary)' }} />
+          <span style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-secondary)' }}>Cancellation</span>
+        </div>
+      </div>
+
 
       {orders.length === 0 ? (
         <div className="glass-card" style={{ textAlign: 'center', padding: '60px 24px' }}>

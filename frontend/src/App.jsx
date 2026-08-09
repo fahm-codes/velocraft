@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Car } from 'lucide-react';
+import { Car, Home, MessageSquare, Gift, ShoppingCart, User } from 'lucide-react';
 import Navbar from './components/Navbar';
 import AuthModal from './components/AuthModal';
 import Notification from './components/Notification';
@@ -211,6 +211,7 @@ export default function App() {
             token={token} 
             user={user} 
             showToast={showToast} 
+            onLogout={handleLogout}
           />
         )}
 
@@ -239,6 +240,41 @@ export default function App() {
           </div>
         )}
       </main>
+
+      {/* --- DARAZ STYLE MOBILE BOTTOM NAVIGATION --- */}
+      <nav className="mobile-bottom-nav">
+        <a href="#" className={`mobile-nav-item ${currentPage === 'catalog' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); setCurrentPage('catalog'); }}>
+          <Home size={22} style={{ color: currentPage === 'catalog' ? 'var(--accent-red)' : 'var(--text-muted)' }} />
+          <span>Home</span>
+        </a>
+        <a href="#" className="mobile-nav-item" onClick={(e) => { e.preventDefault(); showToast('Messages coming soon!', 'info'); }}>
+          <MessageSquare size={22} />
+          <span>Message</span>
+        </a>
+        <a href="#" className="mobile-nav-item" onClick={(e) => { e.preventDefault(); setCurrentPage('catalog'); }}>
+          <Gift size={22} />
+          <span>Campaign</span>
+        </a>
+        <a href="#" className={`mobile-nav-item ${currentPage === 'cart' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); setCurrentPage('cart'); }}>
+          <div style={{ position: 'relative' }}>
+            <ShoppingCart size={22} style={{ color: currentPage === 'cart' ? 'var(--accent-red)' : 'var(--text-muted)' }} />
+            {cart.length > 0 && (
+              <span style={{ position: 'absolute', top: -5, right: -10, background: 'var(--accent-red)', color: '#fff', fontSize: '0.6rem', padding: '2px 5px', borderRadius: '10px', fontWeight: 'bold' }}>
+                {cart.reduce((s, i) => s + i.quantity, 0)}
+              </span>
+            )}
+          </div>
+          <span>Cart</span>
+        </a>
+        <a href="#" className={`mobile-nav-item ${currentPage === 'profile' || currentPage === 'orders' ? 'active' : ''}`} onClick={(e) => { 
+          e.preventDefault(); 
+          if(user) setCurrentPage('profile');
+          else setShowLoginModal(true);
+        }}>
+          <User size={22} style={{ color: currentPage === 'profile' || currentPage === 'orders' ? 'var(--accent-red)' : 'var(--text-muted)' }} />
+          <span>Account</span>
+        </a>
+      </nav>
 
       <Footer />
 
