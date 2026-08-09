@@ -93,68 +93,51 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
   return (
     <div className="animate-fade-in">
       
-      {/* Savoy-style Interactive Hero Carousel Slider */}
-      <header className="hero-slider">
-        <div 
-          className="slider-wrapper" 
-          style={{ 
-            transform: `translateX(-${activeSlide * 100}%)`,
-            width: `${slides.length * 100}%` 
+      {/* Cinematic Video Hero Banner */}
+      <header style={{ position: 'relative', width: '100%', height: '500px', overflow: 'hidden', borderRadius: '24px', marginBottom: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+        <video 
+          src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-drifting-on-a-wet-track-40019-large.mp4"
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 0,
+            filter: 'brightness(0.4)'
           }}
-        >
-          {slides.map((slide, index) => (
-            <div 
-              key={index} 
-              className={`slider-slide ${activeSlide === index ? 'active' : ''}`}
-              style={{ background: slide.bg }}
-            >
-              <div className="slider-content">
-                <span className="badge badge-info" style={{ width: 'fit-content' }}>{slide.category.toUpperCase()} EDITION</span>
-                <h1 className="slider-title">{slide.title}</h1>
-                <p className="slider-desc">{slide.desc}</p>
-                <button 
-                  className="btn btn-primary" 
-                  style={{ width: 'fit-content', padding: '12px 24px', marginTop: '10px' }}
-                  onClick={() => onSelectProduct(slide.id)}
-                >
-                  Explore Details
-                </button>
-              </div>
-              <div className="slider-image-container">
-                <div className="slider-image-glow"></div>
-                <div className="slider-car-graphic">
-                  <video 
-                    src={slide.videoUrl}
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline
-                    style={{
-                      width: '100%',
-                      height: '240px',
-                      objectFit: 'cover',
-                      borderRadius: '12px',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-                      border: '1px solid rgba(255,255,255,0.05)',
-                      animation: 'slowFloat 6s ease-in-out infinite'
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Slider Indicator Dots */}
-        <div className="slider-controls">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              className={`slider-dot ${activeSlide === index ? 'active' : ''}`}
-              onClick={() => setActiveSlide(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+        />
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          zIndex: 1,
+          color: '#fff',
+          padding: '24px'
+        }}>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', textShadow: '0 4px 20px rgba(0,0,0,0.6)' }}>
+            PRECISION IN MOTION
+          </h1>
+          <p style={{ fontSize: '1.1rem', maxWidth: '600px', marginBottom: '32px', textShadow: '0 2px 10px rgba(0,0,0,0.6)', color: '#f3f4f6', lineHeight: '1.6' }}>
+            Experience the thrill of motorsport engineering with our premium die-cast replicas. Crafted for true automotive enthusiasts.
+          </p>
+          <button 
+            className="btn btn-primary" 
+            style={{ padding: '14px 36px', fontSize: '1.1rem', borderRadius: '30px' }}
+            onClick={handleScrollDown}
+          >
+            Explore Collection
+          </button>
         </div>
       </header>
 
