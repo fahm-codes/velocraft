@@ -94,25 +94,15 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
     <div className="animate-fade-in">
       
       {/* Cinematic Video Hero Banner */}
-      <header style={{ position: 'relative', width: '100%', height: '500px', overflow: 'hidden', borderRadius: '24px', marginBottom: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-        <video 
-          src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-drifting-on-a-wet-track-40019-large.mp4"
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            zIndex: 0,
-            filter: 'brightness(0.4)'
-          }}
-        />
+      <header style={{ position: 'relative', width: '100%', height: '500px', overflow: 'hidden', borderRadius: '24px', marginBottom: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', background: '#111' }}>
+        <div style={{ position: 'absolute', top: '-50%', left: 0, width: '100%', height: '200%', zIndex: 0, opacity: 0.6 }}>
+          <iframe 
+            src="https://www.youtube.com/embed/Wv-L67t1oJc?autoplay=1&mute=1&loop=1&playlist=Wv-L67t1oJc&controls=0&showinfo=0&rel=0&modestbranding=1" 
+            frameBorder="0" 
+            allow="autoplay; encrypted-media" 
+            style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
+          ></iframe>
+        </div>
         <div style={{
           position: 'absolute',
           top: 0, left: 0, right: 0, bottom: 0,
