@@ -93,15 +93,14 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
   return (
     <div className="animate-fade-in">
       
-      {/* Cinematic Video Hero Banner */}
+      {/* Cinematic Image Hero Banner */}
       <header style={{ position: 'relative', width: '100%', height: '500px', overflow: 'hidden', borderRadius: '24px', marginBottom: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', background: '#111' }}>
-        <div style={{ position: 'absolute', top: '-50%', left: 0, width: '100%', height: '200%', zIndex: 0, opacity: 0.6 }}>
-          <iframe 
-            src="https://www.youtube.com/embed/Wv-L67t1oJc?autoplay=1&mute=1&loop=1&playlist=Wv-L67t1oJc&controls=0&showinfo=0&rel=0&modestbranding=1" 
-            frameBorder="0" 
-            allow="autoplay; encrypted-media" 
-            style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
-          ></iframe>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+          <img 
+            src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2069&auto=format&fit=crop" 
+            alt="Hero Background"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.5)' }}
+          />
         </div>
         <div style={{
           position: 'absolute',
@@ -168,92 +167,63 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
           <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>Active Filters</span>
         </div>
       </div>
-
       <div className="catalog-layout">
-        {/* Sidebar Controls */}
-        <aside className="filter-sidebar">
-          <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <div>
-              <h3 style={{ fontSize: '1rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '12px' }}>Categories</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {categories.map(cat => {
-                  const bulletColors = {
-                    All: 'var(--text-secondary)',
-                    Supercar: '#ff0055',
-                    JDM: '#00f0ff',
-                    Classic: '#d4af37',
-                    Muscle: '#bd00ff'
-                  };
-                  return (
-                    <button
-                      key={cat}
-                      className={`crm-sidebar-btn ${category === cat ? 'active' : ''}`}
-                      onClick={() => setCategory(cat)}
-                      style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
-                    >
-                      <span style={{
-                        width: '8px',
-                        height: '8px',
-                        borderRadius: '50%',
-                        background: bulletColors[cat] || 'var(--text-secondary)',
-                        boxShadow: `0 0 6px ${bulletColors[cat] || 'transparent'}`
-                      }}></span>
-                      <span>{cat}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div>
-              <h3 style={{ fontSize: '1rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '12px' }}>Scale Ratio</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {scales.map(s => (
-                  <button
-                    key={s}
-                    className={`crm-sidebar-btn ${scale === s ? 'active' : ''}`}
-                    onClick={() => setScale(s)}
-                  >
-                    {s === 'All' ? 'All Scales' : s}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </aside>
 
         {/* Product Grid View */}
-        <main>
-          {/* Sort Controls & Result Count */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+        <main style={{ width: '100%' }}>
+          {/* Horizontal Filter & Sort Toolbar */}
+          <div className="glass-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px', padding: '16px 24px' }}>
+            
+            {/* Left: Result Count */}
+            <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: '500' }}>
               {!loading && `${products.length} model${products.length !== 1 ? 's' : ''} found`}
             </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <ArrowUpDown size={14} style={{ color: 'var(--text-muted)' }} />
-              <select 
-                className="sort-select"
-                value={sortBy} 
-                onChange={e => setSortBy(e.target.value)}
-                style={{
-                  background: 'var(--bg-surface)',
-                  border: '1px solid var(--border-color)',
-                  color: 'var(--text-primary)',
-                  padding: '6px 12px',
-                  borderRadius: '8px',
-                  fontSize: '0.8rem',
-                  cursor: 'pointer',
-                  outline: 'none'
-                }}
-              >
-                <option value="default">Default Order</option>
-                <option value="price-asc">Price: Low → High</option>
-                <option value="price-desc">Price: High → Low</option>
-                <option value="name-az">Name: A → Z</option>
-                <option value="name-za">Name: Z → A</option>
-              </select>
+            
+            {/* Right: Dropdowns */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Category:</span>
+                <select 
+                  className="sort-select"
+                  value={category} 
+                  onChange={e => setCategory(e.target.value)}
+                  style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', padding: '8px 12px', borderRadius: '8px', fontSize: '0.85rem', cursor: 'pointer', outline: 'none' }}
+                >
+                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Scale:</span>
+                <select 
+                  className="sort-select"
+                  value={scale} 
+                  onChange={e => setScale(e.target.value)}
+                  style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', padding: '8px 12px', borderRadius: '8px', fontSize: '0.85rem', cursor: 'pointer', outline: 'none' }}
+                >
+                  {scales.map(s => <option key={s} value={s}>{s === 'All' ? 'All Scales' : s}</option>)}
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderLeft: '1px solid var(--border-color)', paddingLeft: '16px' }}>
+                <ArrowUpDown size={14} style={{ color: 'var(--text-muted)' }} />
+                <select 
+                  className="sort-select"
+                  value={sortBy} 
+                  onChange={e => setSortBy(e.target.value)}
+                  style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', padding: '8px 12px', borderRadius: '8px', fontSize: '0.85rem', cursor: 'pointer', outline: 'none' }}
+                >
+                  <option value="default">Default Order</option>
+                  <option value="price-asc">Price: Low → High</option>
+                  <option value="price-desc">Price: High → Low</option>
+                  <option value="name-az">Name: A → Z</option>
+                  <option value="name-za">Name: Z → A</option>
+                </select>
+              </div>
             </div>
           </div>
+
 
           {loading ? (
             <div className="product-grid">
