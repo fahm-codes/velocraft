@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, User, ShieldAlert, LogOut, Ticket, History, Car, ChevronDown } from 'lucide-react';
 
 export default function Navbar({ 
@@ -7,7 +7,9 @@ export default function Navbar({
   currentPage, 
   setCurrentPage, 
   onLogout, 
-  onOpenLoginModal 
+  onOpenLoginModal,
+  globalSearchQuery,
+  setGlobalSearchQuery
 }) {
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -28,6 +30,16 @@ export default function Navbar({
           Catalog
         </a>
 
+        {/* Global Search Bar */}
+        <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.05)', border: '1px solid var(--border-color)', borderRadius: '20px', padding: '4px 12px', marginLeft: '12px' }}>
+          <input 
+            type="text" 
+            placeholder="Search cars..." 
+            value={globalSearchQuery || ''}
+            onChange={(e) => setGlobalSearchQuery(e.target.value)}
+            style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--text-primary)', fontSize: '0.85rem', width: '150px' }}
+          />
+        </div>
 
         <a 
           href="#cart" 

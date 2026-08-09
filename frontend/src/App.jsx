@@ -35,6 +35,9 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('catalog'); // catalog, product-detail, cart, checkout, orders, tickets, crm-*
   const [selectedProductId, setSelectedProductId] = useState(null);
   
+  // Search state
+  const [globalSearchQuery, setGlobalSearchQuery] = useState('');
+  
   // UI states
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
@@ -144,6 +147,11 @@ export default function App() {
         setCurrentPage={setCurrentPage}
         onLogout={handleLogout}
         onOpenLoginModal={() => setShowLoginModal(true)}
+        globalSearchQuery={globalSearchQuery}
+        setGlobalSearchQuery={(val) => {
+          setGlobalSearchQuery(val);
+          if (currentPage !== 'catalog') setCurrentPage('catalog');
+        }}
       />
 
       <main className="main-content">
@@ -153,6 +161,7 @@ export default function App() {
             onSelectProduct={handleSelectProduct}
             addToCart={handleAddToCart}
             showToast={showToast}
+            globalSearchQuery={globalSearchQuery}
           />
         )}
 

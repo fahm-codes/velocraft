@@ -1,11 +1,10 @@
-﻿import { apiFetch } from '../api';
+import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
 import { Search, SlidersHorizontal, AlertCircle, ChevronDown, ArrowUpDown } from 'lucide-react';
 
-export default function Catalog({ onSelectProduct, addToCart, showToast }) {
+export default function Catalog({ onSelectProduct, addToCart, showToast, globalSearchQuery }) {
   const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [scale, setScale] = useState('All');
   const [loading, setLoading] = useState(true);
@@ -54,7 +53,7 @@ export default function Catalog({ onSelectProduct, addToCart, showToast }) {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (search) params.append('search', search);
+      if (globalSearchQuery) params.append('search', globalSearchQuery);
       if (category && category !== 'All') params.append('category', category);
       if (scale && scale !== 'All') params.append('scale', scale);
 
@@ -81,7 +80,7 @@ export default function Catalog({ onSelectProduct, addToCart, showToast }) {
 
   useEffect(() => {
     fetchProducts();
-  }, [search, category, scale, sortBy]);
+  }, [globalSearchQuery, category, scale, sortBy]);
 
   const handleScrollDown = () => {
     const el = document.getElementById('catalog-explore-section');
@@ -180,15 +179,15 @@ export default function Catalog({ onSelectProduct, addToCart, showToast }) {
           scrollMarginTop: '80px'
         }}
       >
-        <div style={{ position: 'relative', flexGrow: 1 }}>
-          <Search size={18} style={{ position: 'absolute', left: '16px', top: '14px', color: 'var(--text-secondary)' }} />
+        <div style={{ position: 'relative' }}>
+          <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={20} />
           <input 
             type="text" 
+            placeholder="Search collection via Navbar..." 
+            value={globalSearchQuery || ''}
+            readOnly
             className="form-input" 
-            placeholder="Search by model name, brand or details..." 
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ paddingLeft: '48px' }}
+            style={{ paddingLeft: '48px', width: '300px', background: 'rgba(255,255,255,0.02)' }}
           />
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'var(--text-secondary)' }}>

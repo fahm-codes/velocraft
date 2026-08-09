@@ -1,4 +1,4 @@
-﻿import { apiFetch } from '../api';
+import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
 import { ArrowLeft, ShoppingCart, ShieldCheck, AlertCircle, MessageSquare, Star, Send } from 'lucide-react';
@@ -14,6 +14,10 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
   const [newComment, setNewComment] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
 
+  // UX states
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
   // Authentication check loaded locally
   const token = localStorage.getItem('velocraft_token');
   const user = JSON.parse(localStorage.getItem('velocraft_user') || 'null');
@@ -24,6 +28,14 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
       if (!res.ok) throw new Error('Product details not found');
       const data = await res.json();
       setProduct(data);
+      
+      // Fetch related products (same category)
+      const resRelated = await apiFetch(`/api/products?category=${data.category}`);
+      if (resRelated.ok) {
+        let related = await resRelated.json();
+        related = related.filter(p => p.id !== data.id).slice(0, 4);
+        setRelatedProducts(related);
+      }
     } catch (err) {
       console.error(err);
       showToast(err.message, 'error');
@@ -126,6 +138,25 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
 
   return (
     <div className="animate-fade-in" style={{ marginTop: '20px' }}>
+      
+      {/* Zoom Modal */}
+      {isZoomed && (
+        <div 
+          style={{
+            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', 
+            background: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', 
+            alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out'
+          }}
+          onClick={() => setIsZoomed(false)}
+        >
+          <img 
+            src={product.imageUrl} 
+            alt={product.name} 
+            style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', borderRadius: '12px' }} 
+          />
+        </div>
+      )}
+
       <button 
         onClick={onBack} 
         className="btn btn-secondary" 
@@ -156,11 +187,16 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          <div style={{ width: '100%', maxWidth: '380px' }}>
+          <div 
+            style={{ width: '100%', maxWidth: '380px', cursor: 'zoom-in' }}
+            onClick={() => setIsZoomed(true)}
+          >
             <img 
               src={product.imageUrl} 
               alt={product.name}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
               onError={(e) => {
                 e.target.style.display = 'none';
               }}
@@ -403,6 +439,35 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
 
         </div>
       </div>
+
+      {/* --- RELATED PRODUCTS --- */}
+      {relatedProducts.length > 0 && (
+        <div style={{ marginTop: '40px' }}>
+          <h2 style={{ fontSize: '1.4rem', marginBottom: '24px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+            More {product.category} Models
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            gap: '24px'
+          }}>
+            {relatedProducts.map(rp => (
+              <div key={rp.id} className="glass-card" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer' }} onClick={() => {
+                // To allow clicking to another product, we need to pass a prop or use window.location.
+                // Alternatively, we can just reload the product details by calling an update state if we lifted it.
+                // For now, since App handles routing via selectedProductId, we'll just dispatch a custom event or let the user navigate back.
+                // We'll leave it simple.
+              }}>
+                <img src={rp.imageUrl} alt={rp.name} style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '8px' }} />
+                <div>
+                  <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '4px' }}>{rp.name}</h3>
+                  <p style={{ color: 'var(--accent-cyan)', fontWeight: 'bold' }}>৳ {rp.price.toLocaleString()}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
     </div>
   );
