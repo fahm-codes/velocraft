@@ -1,7 +1,7 @@
 import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
-import { Search, SlidersHorizontal, AlertCircle, ChevronDown, ArrowUpDown } from 'lucide-react';
+import { Search, SlidersHorizontal, AlertCircle, ChevronDown, ArrowUpDown, Zap, Gift, Truck, CreditCard } from 'lucide-react';
 
 export default function Catalog({ onSelectProduct, addToCart, showToast, globalSearchQuery }) {
   const [products, setProducts] = useState([]);
@@ -12,6 +12,30 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
 
   // Savoy style Hero slider state
   const [activeSlide, setActiveSlide] = useState(0);
+
+  // Flash Sale Timer State
+  const [flashSaleTime, setFlashSaleTime] = useState({ h: 2, m: 59, s: 59 });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setFlashSaleTime(prev => {
+        let { h, m, s } = prev;
+        if (s > 0) {
+          s -= 1;
+        } else {
+          s = 59;
+          if (m > 0) {
+            m -= 1;
+          } else {
+            m = 59;
+            if (h > 0) h -= 1;
+          }
+        }
+        return { h, m, s };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const slides = [
     {
@@ -85,8 +109,8 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
   // Automatic Hero Carousel Timer
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveSlide((prev) => (prev === 0 ? 1 : 0));
-    }, 5000);
+      setActiveSlide((prev) => (prev + 1) % 4);
+    }, 4000);
     return () => clearInterval(timer);
   }, []);
 
@@ -149,7 +173,105 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
             </button>
           </div>
         </div>
+
+        {/* Slide 2: Free Delivery Campaign */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0,
+          opacity: activeSlide === 2 ? 1 : 0, transition: 'opacity 1s ease-in-out',
+          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+        }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px' }}>
+            <Truck size={64} style={{ color: '#fff', marginBottom: '16px' }} />
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', color: '#ffffff' }}>
+              NATIONWIDE FREE DELIVERY
+            </h1>
+            <p style={{ fontSize: '1.25rem', maxWidth: '600px', marginBottom: '32px', color: '#ecfdf5', lineHeight: '1.6' }}>
+              We now deliver anywhere in Bangladesh completely free of charge. No minimum order required!
+            </p>
+          </div>
+        </div>
+
+        {/* Slide 3: Bank Offers */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0,
+          opacity: activeSlide === 3 ? 1 : 0, transition: 'opacity 1s ease-in-out',
+          background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+        }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px' }}>
+            <CreditCard size={64} style={{ color: '#fff', marginBottom: '16px' }} />
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', color: '#ffffff' }}>
+              BANK PARTNER OFFERS
+            </h1>
+            <p style={{ fontSize: '1.25rem', maxWidth: '600px', marginBottom: '32px', color: '#eff6ff', lineHeight: '1.6' }}>
+              Get an extra 20% OFF when paying with City Bank, DBBL, or EBL Credit Cards.
+            </p>
+          </div>
+        </div>
       </header>
+
+      {/* --- DARAZ STYLE FEATURE GRID --- */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '40px', gap: '16px', overflowX: 'auto', paddingBottom: '10px' }}>
+        {[
+          { icon: <Zap size={24} color="#f97316" />, label: 'Flash Sale' },
+          { icon: <Gift size={24} color="#ec4899" />, label: 'Vouchers' },
+          { icon: <Truck size={24} color="#10b981" />, label: 'Free Shipping' },
+          { icon: <CreditCard size={24} color="#3b82f6" />, label: 'Bank Offers' }
+        ].map((feature, idx) => (
+          <div key={idx} className="glass-card" style={{ flex: '1', minWidth: '100px', padding: '16px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', textAlign: 'center' }} onClick={handleScrollDown}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--bg-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
+              {feature.icon}
+            </div>
+            <span style={{ fontSize: '0.8rem', fontWeight: '600', color: 'var(--text-secondary)' }}>{feature.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* --- FLASH SALE SECTION --- */}
+      <div className="glass-card" style={{ marginBottom: '40px', borderTop: '4px solid #f97316', padding: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <h2 style={{ fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px', color: '#f97316' }}>
+              <Zap size={24} fill="#f97316" /> Flash Sale
+            </h2>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Ending in</span>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <div style={{ background: '#f97316', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.h).padStart(2, '0')}</div>
+                <span style={{ color: '#f97316', fontWeight: 'bold' }}>:</span>
+                <div style={{ background: '#f97316', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.m).padStart(2, '0')}</div>
+                <span style={{ color: '#f97316', fontWeight: 'bold' }}>:</span>
+                <div style={{ background: '#f97316', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.s).padStart(2, '0')}</div>
+              </div>
+            </div>
+          </div>
+          <button style={{ background: 'transparent', border: 'none', color: '#f97316', fontWeight: '600', cursor: 'pointer' }}>SHOP MORE &gt;</button>
+        </div>
+        
+        {/* Flash Sale Horizontal Scroll */}
+        <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '16px', scrollSnapType: 'x mandatory' }}>
+          {products.slice(0, 4).map(product => (
+            <div key={`flash-${product.id}`} className="product-card" style={{ minWidth: '220px', width: '220px', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden', scrollSnapAlign: 'start' }}>
+              <div style={{ position: 'relative', height: '160px' }}>
+                <img src={product.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={product.name} />
+                <div style={{ position: 'absolute', top: 0, right: 0, background: '#f97316', color: '#fff', padding: '4px 10px', borderBottomLeftRadius: '12px', fontWeight: 'bold', fontSize: '0.8rem' }}>
+                  50% OFF
+                </div>
+              </div>
+              <div style={{ padding: '12px' }}>
+                <h3 style={{ fontSize: '0.9rem', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.name}</h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ color: '#f97316', fontWeight: 'bold', fontSize: '1.1rem' }}>৳ {(product.price / 2).toLocaleString()}</span>
+                  <span style={{ textDecoration: 'line-through', color: 'var(--text-muted)', fontSize: '0.8rem' }}>৳ {product.price.toLocaleString()}</span>
+                </div>
+                <div style={{ width: '100%', background: '#ffedd5', height: '6px', borderRadius: '3px', marginTop: '12px', overflow: 'hidden' }}>
+                  <div style={{ width: '85%', background: '#f97316', height: '100%' }}></div>
+                </div>
+                <div style={{ fontSize: '0.7rem', color: '#f97316', marginTop: '4px' }}>Only 3 left!</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Bouncing Scroll Explorer prompt */}
       <div className="scroll-explore" onClick={handleScrollDown}>

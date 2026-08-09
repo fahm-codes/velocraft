@@ -13,6 +13,38 @@ import {
 } from 'lucide-react';
 
 export default function Profile({ user, showToast, onLogout }) {
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [division, setDivision] = useState('Dhaka');
+  const [zipCode, setZipCode] = useState('');
+
+  // Load saved default address from localStorage on mount
+  useEffect(() => {
+    if (user) {
+      const savedAddr = localStorage.getItem(`velocraft_addr_${user.id}`);
+      if (savedAddr) {
+        const parsed = JSON.parse(savedAddr);
+        setAddress(parsed.address || '');
+        setCity(parsed.city || '');
+        setDivision(parsed.division || 'Dhaka');
+        setZipCode(parsed.zipCode || '');
+      }
+    }
+  }, [user]);
+
+  const handleSaveAddress = (e) => {
+    e.preventDefault();
+    if (!address || !city || !zipCode) {
+      showToast('Please fill out all address fields.', 'error');
+      return;
+    }
+
+    const addrObj = { address, city, division, zipCode, country: 'Bangladesh' };
+    localStorage.setItem(`velocraft_addr_${user.id}`, JSON.stringify(addrObj));
+    showToast('Default shipping address saved successfully!', 'success');
+    setShowAddressForm(false);
+  };
   
   const handleFeatureClick = (featureName) => {
     showToast(`${featureName} feature coming soon!`, 'info');
@@ -86,14 +118,42 @@ export default function Profile({ user, showToast, onLogout }) {
 
         <div 
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid var(--border-color)', cursor: 'pointer', transition: '0.2s' }}
-          onClick={() => handleFeatureClick('Address Book')}
+          onClick={() => setShowAddressForm(!showAddressForm)}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <MapPin size={20} style={{ color: 'var(--text-muted)' }} />
             <span style={{ fontWeight: '500' }}>Address Book</span>
           </div>
-          <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+          <ChevronRight size={18} style={{ color: 'var(--text-muted)', transform: showAddressForm ? 'rotate(90deg)' : 'none', transition: '0.2s' }} />
         </div>
+
+        {showAddressForm && (
+          <div style={{ padding: '24px', background: 'rgba(0,0,0,0.02)', borderBottom: '1px solid var(--border-color)' }}>
+            <form onSubmit={handleSaveAddress}>
+              <div className="form-group">
+                <label className="form-label">Street Address / Area</label>
+                <input type="text" className="form-input" placeholder="e.g. House 45, Road 12, Dhanmondi" value={address} onChange={(e) => setAddress(e.target.value)} required />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
+                <div className="form-group">
+                  <label className="form-label">City</label>
+                  <input type="text" className="form-input" value={city} onChange={(e) => setCity(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Division</label>
+                  <select className="form-select" value={division} onChange={(e) => setDivision(e.target.value)}>
+                    {['Dhaka', 'Chittagong', 'Rajshahi', 'Khulna', 'Barisal', 'Sylhet', 'Rangpur', 'Mymensingh'].map(d => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="form-group" style={{ marginTop: '16px' }}>
+                <label className="form-label">Zip / Postal Code</label>
+                <input type="text" className="form-input" value={zipCode} onChange={(e) => setZipCode(e.target.value)} required />
+              </div>
+              <button type="submit" className="btn btn-primary" style={{ marginTop: '16px', width: '100%' }}>Save Address</button>
+            </form>
+          </div>
+        )}
 
         <div 
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid var(--border-color)', cursor: 'pointer', transition: '0.2s' }}
