@@ -114,10 +114,10 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
           color: '#fff',
           padding: '24px'
         }}>
-          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', textShadow: '0 4px 20px rgba(0,0,0,0.6)' }}>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', textShadow: '0 4px 20px rgba(0,0,0,0.6)', color: '#ffffff' }}>
             PRECISION IN MOTION
           </h1>
-          <p style={{ fontSize: '1.1rem', maxWidth: '600px', marginBottom: '32px', textShadow: '0 2px 10px rgba(0,0,0,0.6)', color: '#f3f4f6', lineHeight: '1.6' }}>
+          <p style={{ fontSize: '1.1rem', maxWidth: '600px', marginBottom: '32px', textShadow: '0 2px 10px rgba(0,0,0,0.6)', color: '#ffffff', lineHeight: '1.6' }}>
             Experience the thrill of motorsport engineering with our premium die-cast replicas. Crafted for true automotive enthusiasts.
           </p>
           <button 

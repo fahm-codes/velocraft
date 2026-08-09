@@ -264,10 +264,11 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   height: 70px;
-  background: rgba(10, 11, 13, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -280,14 +281,11 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 10px;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 1.5rem;
-  letter-spacing: 0.05em;
-  color: var(--text-primary);
+  letter-spacing: 0.02em;
+  color: #111;
   text-decoration: none;
-  background: linear-gradient(135deg, #fff, #888);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .nav-links {
