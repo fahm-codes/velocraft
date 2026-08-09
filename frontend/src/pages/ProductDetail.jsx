@@ -191,14 +191,12 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
           {show3D ? (
             <model-viewer 
               src="https://modelviewer.dev/shared-assets/models/ToyCar.glb" 
-              ios-src="" 
-              poster={product.imageUrl} 
               alt="A 3D model of a car" 
               shadow-intensity="1" 
-              camera-controls 
-              auto-rotate 
-              ar 
-              style={{ width: '100%', height: '100%' }}
+              camera-controls="true" 
+              auto-rotate="true" 
+              ar="true" 
+              style={{ width: '100%', height: '100%', minHeight: '350px' }}
             ></model-viewer>
           ) : (
             <div 
