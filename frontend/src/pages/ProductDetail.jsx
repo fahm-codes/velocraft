@@ -16,7 +16,6 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
 
   // UX states
   const [isZoomed, setIsZoomed] = useState(false);
-  const [show3D, setShow3D] = useState(true); // Default to true to wow the user!
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   // Authentication check loaded locally
@@ -176,7 +175,7 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
         alignItems: 'center',
         marginBottom: '40px'
       }}>
-        {/* Left Side: Car Graphic / 3D Viewer */}
+        {/* Left Side: Car Graphic */}
         <div style={{
           background: '#0d0f14',
           borderRadius: '12px',
@@ -188,51 +187,21 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          {show3D ? (
-            <model-viewer 
-              src="https://modelviewer.dev/shared-assets/models/ToyCar.glb" 
-              alt="A 3D model of a car" 
-              shadow-intensity="1" 
-              camera-controls="true" 
-              auto-rotate="true" 
-              ar="true" 
-              style={{ width: '100%', height: '100%', minHeight: '350px' }}
-            ></model-viewer>
-          ) : (
-            <div 
-              style={{ width: '100%', maxWidth: '380px', cursor: 'zoom-in' }}
-              onClick={() => setIsZoomed(true)}
-            >
-              <img 
-                src={product.imageUrl} 
-                alt={product.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
-                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
-            </div>
-          )}
-
-          <div style={{ position: 'absolute', bottom: '16px', display: 'flex', gap: '8px', zIndex: 10 }}>
-            <button 
-              onClick={() => setShow3D(true)}
-              className={`btn ${show3D ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '20px' }}
-            >
-              3D AR View
-            </button>
-            <button 
-              onClick={() => setShow3D(false)}
-              className={`btn ${!show3D ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '20px' }}
-            >
-              Image
-            </button>
+          <div 
+            style={{ width: '100%', maxWidth: '380px', cursor: 'zoom-in' }}
+            onClick={() => setIsZoomed(true)}
+          >
+            <img 
+              src={product.imageUrl} 
+              alt={product.name}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
           </div>
-
           <span className="badge badge-info" style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '0.85rem' }}>
             {product.scale} Scale
           </span>
