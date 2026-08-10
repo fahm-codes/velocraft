@@ -227,46 +227,51 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
       </div>
 
       {/* --- FLASH SALE SECTION --- */}
-      <div className="glass-card" style={{ marginBottom: '40px', borderTop: '4px solid #f97316', padding: '24px' }}>
+      <div className="glass-card" style={{ marginBottom: '40px', borderTop: '4px solid var(--accent-red)', padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <h2 style={{ fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px', color: '#f97316' }}>
-              <Zap size={24} fill="#f97316" /> Flash Sale
+            <h2 style={{ fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-red)' }}>
+              <Zap size={24} fill="var(--accent-red)" /> Flash Sale
             </h2>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Ending in</span>
               <div style={{ display: 'flex', gap: '4px' }}>
-                <div style={{ background: '#f97316', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.h).padStart(2, '0')}</div>
-                <span style={{ color: '#f97316', fontWeight: 'bold' }}>:</span>
-                <div style={{ background: '#f97316', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.m).padStart(2, '0')}</div>
-                <span style={{ color: '#f97316', fontWeight: 'bold' }}>:</span>
-                <div style={{ background: '#f97316', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.s).padStart(2, '0')}</div>
+                <div style={{ background: 'var(--accent-red)', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.h).padStart(2, '0')}</div>
+                <span style={{ color: 'var(--accent-red)', fontWeight: 'bold' }}>:</span>
+                <div style={{ background: 'var(--accent-red)', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.m).padStart(2, '0')}</div>
+                <span style={{ color: 'var(--accent-red)', fontWeight: 'bold' }}>:</span>
+                <div style={{ background: 'var(--accent-red)', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{String(flashSaleTime.s).padStart(2, '0')}</div>
               </div>
             </div>
           </div>
-          <button style={{ background: 'transparent', border: 'none', color: '#f97316', fontWeight: '600', cursor: 'pointer' }}>SHOP MORE &gt;</button>
+          <button style={{ background: 'transparent', border: 'none', color: 'var(--accent-red)', fontWeight: '600', cursor: 'pointer' }} onClick={handleScrollDown}>SHOP MORE &gt;</button>
         </div>
         
         {/* Flash Sale Horizontal Scroll */}
         <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '16px', scrollSnapType: 'x mandatory' }}>
           {products.slice(0, 4).map(product => (
-            <div key={`flash-${product.id}`} className="product-card" style={{ minWidth: '220px', width: '220px', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden', scrollSnapAlign: 'start' }}>
+            <div 
+              key={`flash-${product.id}`} 
+              className="product-card" 
+              style={{ minWidth: '220px', width: '220px', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden', scrollSnapAlign: 'start', cursor: 'pointer' }}
+              onClick={() => onSelectProduct(product)}
+            >
               <div style={{ position: 'relative', height: '160px' }}>
                 <img src={product.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={product.name} />
-                <div style={{ position: 'absolute', top: 0, right: 0, background: '#f97316', color: '#fff', padding: '4px 10px', borderBottomLeftRadius: '12px', fontWeight: 'bold', fontSize: '0.8rem' }}>
+                <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--accent-red)', color: '#fff', padding: '4px 10px', borderBottomLeftRadius: '12px', fontWeight: 'bold', fontSize: '0.8rem' }}>
                   50% OFF
                 </div>
               </div>
               <div style={{ padding: '12px' }}>
                 <h3 style={{ fontSize: '0.9rem', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.name}</h3>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ color: '#f97316', fontWeight: 'bold', fontSize: '1.1rem' }}>৳ {(product.price / 2).toLocaleString()}</span>
+                  <span style={{ color: 'var(--accent-red)', fontWeight: 'bold', fontSize: '1.1rem' }}>৳ {(product.price / 2).toLocaleString()}</span>
                   <span style={{ textDecoration: 'line-through', color: 'var(--text-muted)', fontSize: '0.8rem' }}>৳ {product.price.toLocaleString()}</span>
                 </div>
-                <div style={{ width: '100%', background: '#ffedd5', height: '6px', borderRadius: '3px', marginTop: '12px', overflow: 'hidden' }}>
-                  <div style={{ width: '85%', background: '#f97316', height: '100%' }}></div>
+                <div style={{ width: '100%', background: 'rgba(255, 42, 95, 0.2)', height: '6px', borderRadius: '3px', marginTop: '12px', overflow: 'hidden' }}>
+                  <div style={{ width: '85%', background: 'var(--accent-red)', height: '100%' }}></div>
                 </div>
-                <div style={{ fontSize: '0.7rem', color: '#f97316', marginTop: '4px' }}>Only 3 left!</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--accent-red)', marginTop: '4px' }}>Only 3 left!</div>
               </div>
             </div>
           ))}
