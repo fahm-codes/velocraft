@@ -157,9 +157,9 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
           opacity: activeSlide === 1 ? 1 : 0, transition: 'opacity 1s ease-in-out'
         }}>
           <img 
-            src="https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=2000&auto=format&fit=crop" 
+            src="/campaign_red.jpg" 
             alt="Campaign Background"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.3)' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.6)' }}
           />
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px' }}>
             <h1 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: '900', marginBottom: '16px', letterSpacing: '-0.02em', textShadow: '0 4px 20px rgba(255,0,0,0.8)', color: '#ff2a5f' }}>
