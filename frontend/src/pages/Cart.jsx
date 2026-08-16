@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CarGraphic from '../components/CarGraphic';
-import { Trash2, CreditCard, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Trash2, CreditCard, ArrowRight, ArrowLeft, Zap } from 'lucide-react';
+import OneTapCheckout from '../components/OneTapCheckout';
 
 export default function Cart({ 
   cart, 
@@ -8,8 +9,12 @@ export default function Cart({
   onRemoveItem, 
   setCurrentPage, 
   user, 
+  token,
+  showToast,
+  onClearCart,
   onOpenLoginModal 
 }) {
+  const [showOneTap, setShowOneTap] = useState(false);
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 18000 ? 0 : (subtotal > 0 ? 1200 : 0);
   const total = subtotal + shipping;
@@ -149,17 +154,39 @@ export default function Cart({
 
             <button 
               className="btn btn-primary" 
-              style={{ width: '100%', padding: '12px' }}
+              style={{ width: '100%', padding: '12px', marginBottom: '12px' }}
               onClick={handleCheckoutClick}
             >
               <CreditCard size={16} />
-              <span>{user ? 'Proceed to Checkout' : 'Login to Finalize Purchase'}</span>
+              <span>{user ? 'Standard Checkout' : 'Login to Finalize Purchase'}</span>
               <ArrowRight size={16} />
             </button>
 
+            {user && (
+              <button 
+                className="btn btn-primary" 
+                style={{ 
+                  width: '100%', 
+                  padding: '12px', 
+                  marginBottom: '12px',
+                  background: 'linear-gradient(90deg, #00e5ff 0%, #0077ff 100%)',
+                  border: 'none',
+                  boxShadow: '0 4px 15px rgba(0,229,255,0.3)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onClick={() => setShowOneTap(true)}
+              >
+                <Zap size={16} fill="#000" color="#000" />
+                <span style={{ color: '#000', fontWeight: 'bold' }}>One-Tap Buy</span>
+              </button>
+            )}
+
             <button 
               className="btn btn-secondary" 
-              style={{ width: '100%', marginTop: '12px', padding: '10px' }}
+              style={{ width: '100%', padding: '10px' }}
               onClick={() => setCurrentPage('catalog')}
             >
               <span>Continue Shopping</span>
@@ -167,6 +194,22 @@ export default function Cart({
           </div>
         </aside>
       </div>
+
+      {showOneTap && (
+        <OneTapCheckout 
+          items={cart}
+          user={user}
+          token={token}
+          onClose={() => setShowOneTap(false)}
+          onSuccess={() => {
+            setShowOneTap(false);
+            onClearCart();
+            setCurrentPage('orders');
+            showToast('Order placed successfully!', 'success');
+          }}
+          showToast={showToast}
+        />
+      )}
     </div>
   );
 }

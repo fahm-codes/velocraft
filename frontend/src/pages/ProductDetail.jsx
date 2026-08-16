@@ -1,9 +1,10 @@
 import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
-import { ArrowLeft, ShoppingCart, ShieldCheck, AlertCircle, MessageSquare, Star, Send } from 'lucide-react';
+import OneTapCheckout from '../components/OneTapCheckout';
+import { ArrowLeft, ShoppingCart, ShieldCheck, AlertCircle, MessageSquare, Star, Send, Zap } from 'lucide-react';
 
-export default function ProductDetail({ productId, onBack, addToCart, showToast }) {
+export default function ProductDetail({ productId, onBack, addToCart, showToast, user, token, onClearCart }) {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -16,11 +17,8 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
 
   // UX states
   const [isZoomed, setIsZoomed] = useState(false);
+  const [showOneTap, setShowOneTap] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
-
-  // Authentication check loaded locally
-  const token = localStorage.getItem('velocraft_token');
-  const user = JSON.parse(localStorage.getItem('velocraft_user') || 'null');
 
   const fetchProductDetails = async () => {
     try {
@@ -291,6 +289,23 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
                     <ShoppingCart size={18} />
                     <span>Add to Collection</span>
                   </button>
+                  {user && (
+                    <button 
+                      onClick={() => setShowOneTap(true)}
+                      className="btn btn-primary"
+                      style={{ 
+                        flexGrow: 1, 
+                        padding: '14px 28px',
+                        background: 'linear-gradient(90deg, #00e5ff 0%, #0077ff 100%)',
+                        border: 'none',
+                        boxShadow: '0 4px 15px rgba(0,229,255,0.3)',
+                        color: '#000'
+                      }}
+                    >
+                      <Zap size={18} fill="#000" color="#000" />
+                      <span style={{ fontWeight: 'bold' }}>Buy it Now</span>
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -390,11 +405,11 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
                     onChange={(e) => setNewRating(parseInt(e.target.value))}
                     style={{ background: 'var(--bg-card)' }}
                   >
-                    <option value="5">â­â­â­â­â­ (5 - Exceptional)</option>
-                    <option value="4">â­â­â­â­ (4 - Very Good)</option>
-                    <option value="3">â­â­â­ (3 - Average)</option>
-                    <option value="2">â­â­ (2 - Subpar)</option>
-                    <option value="1">â­ (1 - Damaged/Poor)</option>
+                    <option value="5">★ ★ ★ ★ ★  (5 - Exceptional)</option>
+                    <option value="4">★ ★ ★ ★  (4 - Very Good)</option>
+                    <option value="3">★ ★ ★  (3 - Average)</option>
+                    <option value="2">★ ★  (2 - Subpar)</option>
+                    <option value="1">★  (1 - Damaged/Poor)</option>
                   </select>
                 </div>
 
@@ -460,10 +475,6 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
           }}>
             {relatedProducts.map(rp => (
               <div key={rp.id} className="glass-card" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer' }} onClick={() => {
-                // To allow clicking to another product, we need to pass a prop or use window.location.
-                // Alternatively, we can just reload the product details by calling an update state if we lifted it.
-                // For now, since App handles routing via selectedProductId, we'll just dispatch a custom event or let the user navigate back.
-                // We'll leave it simple.
               }}>
                 <img src={rp.imageUrl} alt={rp.name} style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '8px' }} />
                 <div>
@@ -476,8 +487,20 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast 
         </div>
       )}
 
+      {showOneTap && (
+        <OneTapCheckout 
+          items={[{ ...product, quantity }]}
+          user={user}
+          token={token}
+          onClose={() => setShowOneTap(false)}
+          onSuccess={() => {
+            setShowOneTap(false);
+            showToast('Order placed successfully!', 'success');
+            onBack();
+          }}
+          showToast={showToast}
+        />
+      )}
     </div>
   );
 }
-
-

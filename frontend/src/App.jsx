@@ -195,6 +195,9 @@ export default function App() {
             onBack={() => setCurrentPage('catalog')}
             addToCart={handleAddToCart}
             showToast={showToast}
+            user={user}
+            token={token}
+            onClearCart={handleClearCart}
           />
         )}
 
@@ -205,6 +208,9 @@ export default function App() {
             onRemoveItem={handleRemoveCartItem}
             setCurrentPage={setCurrentPage}
             user={user}
+            token={token}
+            showToast={showToast}
+            onClearCart={handleClearCart}
             onOpenLoginModal={() => setShowLoginModal(true)}
           />
         )}
