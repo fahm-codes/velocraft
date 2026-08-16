@@ -194,17 +194,25 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
         {/* Slide 3: Bank Offers */}
         <div style={{
           position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0,
-          opacity: activeSlide === 3 ? 1 : 0, transition: 'opacity 1s ease-in-out',
-          background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+          opacity: activeSlide === 3 ? 1 : 0, transition: 'opacity 1s ease-in-out'
         }}>
+          <img 
+            src="/campaign_bank.jpg" 
+            alt="Bank Partner Campaign"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.5)' }}
+          />
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px' }}>
-            <CreditCard size={64} style={{ color: '#fff', marginBottom: '16px' }} />
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', color: '#ffffff' }}>
-              BANK PARTNER OFFERS
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', color: '#00e5ff', textShadow: '0 4px 20px rgba(0,229,255,0.6)' }}>
+              EXCLUSIVE BANK OFFERS
             </h1>
-            <p style={{ fontSize: '1.25rem', maxWidth: '600px', marginBottom: '32px', color: '#eff6ff', lineHeight: '1.6' }}>
-              Get an extra 20% OFF when paying with City Bank, DBBL, or EBL Credit Cards.
+            <p style={{ fontSize: '1.25rem', maxWidth: '700px', marginBottom: '32px', color: '#ffffff', lineHeight: '1.6', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
+              Get an extra 20% OFF when paying with <strong>City Bank, BRAC Bank, EBL</strong> or any international <strong>Visa / Mastercard</strong>.
             </p>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <button className="btn btn-secondary" style={{ padding: '14px 36px', fontSize: '1.1rem', borderRadius: '30px', borderColor: '#00e5ff', color: '#00e5ff', background: 'rgba(0, 229, 255, 0.1)' }} onClick={handleScrollDown}>
+                View Eligible Items
+              </button>
+            </div>
           </div>
         </div>
       </header>
