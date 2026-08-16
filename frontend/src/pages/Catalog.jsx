@@ -254,7 +254,7 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
               key={`flash-${product.id}`} 
               className="product-card" 
               style={{ minWidth: '220px', width: '220px', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden', scrollSnapAlign: 'start', cursor: 'pointer' }}
-              onClick={() => onSelectProduct(product)}
+              onClick={() => onSelectProduct(product.id)}
             >
               <div style={{ position: 'relative', height: '160px' }}>
                 <img src={product.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={product.name} />
