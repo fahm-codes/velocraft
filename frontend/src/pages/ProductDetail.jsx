@@ -2,7 +2,8 @@ import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
 import OneTapCheckout from '../components/OneTapCheckout';
-import { ArrowLeft, ShoppingCart, ShieldCheck, AlertCircle, MessageSquare, Star, Send, Zap } from 'lucide-react';
+import Tilt from 'react-parallax-tilt';
+import { ArrowLeft, ShoppingCart, ShieldCheck, AlertCircle, MessageSquare, Star, Send, Zap, Box } from 'lucide-react';
 
 export default function ProductDetail({ productId, onBack, addToCart, showToast, user, token, onClearCart }) {
   const [product, setProduct] = useState(null);
@@ -137,21 +138,41 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast,
   return (
     <div className="animate-fade-in" style={{ marginTop: '20px' }}>
       
-      {/* Zoom Modal */}
+      {/* Showroom Fullscreen Modal */}
       {isZoomed && (
         <div 
           style={{
             position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', 
-            background: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', 
-            alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out'
+            background: 'radial-gradient(circle at center, #1a1a2e 0%, #000000 100%)', zIndex: 9999, display: 'flex', 
+            flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out'
           }}
           onClick={() => setIsZoomed(false)}
         >
-          <img 
-            src={product.imageUrl} 
-            alt={product.name} 
-            style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', borderRadius: '12px' }} 
-          />
+          <div style={{ position: 'absolute', top: '40px', color: 'rgba(255,255,255,0.5)', letterSpacing: '8px', fontSize: '1.2rem', textTransform: 'uppercase' }}>
+            Virtual Showroom
+          </div>
+          <Tilt 
+            tiltMaxAngleX={15} 
+            tiltMaxAngleY={15} 
+            perspective={1000} 
+            transitionSpeed={1500} 
+            scale={1.05} 
+            gyroscope={true}
+            glareEnable={true}
+            glareMaxOpacity={0.4}
+            glareColor="#ffffff"
+            glarePosition="bottom"
+            style={{ width: '80vw', height: '60vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            <img 
+              src={product.imageUrl} 
+              alt={product.name} 
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.8))' }} 
+            />
+          </Tilt>
+          <div style={{ position: 'absolute', bottom: '40px', color: 'rgba(255,255,255,0.3)', fontSize: '0.9rem' }}>
+            Hover or drag to inspect model
+          </div>
         </div>
       )}
 
@@ -173,34 +194,56 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast,
         alignItems: 'center',
         marginBottom: '40px'
       }}>
-        {/* Left Side: Car Graphic */}
+        {/* Left Side: 3D Car Graphic */}
         <div style={{
-          background: '#0d0f14',
-          borderRadius: '12px',
-          border: '1px solid var(--border-color)',
+          background: 'linear-gradient(145deg, #11131a 0%, #08090c 100%)',
+          borderRadius: '16px',
+          border: '1px solid rgba(255,255,255,0.05)',
           overflow: 'hidden',
           aspectRatio: '16/10',
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          boxShadow: 'inset 0 0 50px rgba(0,0,0,0.5)'
         }}>
-          <div 
-            style={{ width: '100%', maxWidth: '380px', cursor: 'zoom-in' }}
+          <Tilt 
+            tiltMaxAngleX={10} 
+            tiltMaxAngleY={10} 
+            perspective={1000} 
+            transitionSpeed={1500} 
+            scale={1.02} 
+            gyroscope={true}
+            glareEnable={true}
+            glareMaxOpacity={0.3}
+            glareColor="#00e5ff"
+            glarePosition="all"
+            style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'zoom-in' }}
+          >
+            <div 
+              style={{ width: '100%', maxWidth: '420px', animation: 'float 6s ease-in-out infinite' }}
+              onClick={() => setIsZoomed(true)}
+            >
+              <img 
+                src={product.imageUrl} 
+                alt={product.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'drop-shadow(0 15px 20px rgba(0,0,0,0.6))' }}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            </div>
+          </Tilt>
+          
+          <button 
+            className="btn btn-secondary"
+            style={{ position: 'absolute', bottom: '16px', left: '16px', padding: '6px 12px', fontSize: '0.8rem', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', zIndex: 10 }}
             onClick={() => setIsZoomed(true)}
           >
-            <img 
-              src={product.imageUrl} 
-              alt={product.name}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
-              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-              onError={(e) => {
-                e.target.style.display = 'none';
-              }}
-            />
-          </div>
-          <span className="badge badge-info" style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '0.85rem' }}>
+            <Box size={14} /> Enter Showroom
+          </button>
+          
+          <span className="badge badge-info" style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '0.85rem', zIndex: 10 }}>
             {product.scale} Scale
           </span>
         </div>

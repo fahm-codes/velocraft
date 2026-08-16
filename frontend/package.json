@@ -12,7 +12,8 @@
   "dependencies": {
     "lucide-react": "^1.28.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-parallax-tilt": "^1.7.337"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
