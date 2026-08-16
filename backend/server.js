@@ -710,6 +710,69 @@ app.post('/api/products/:id/reviews', authenticateToken, (req, res) => {
   res.status(201).json(savedReview);
 });
 
+// --- CAMPAIGNS & COUPONS ENDPOINTS ---
+
+app.get('/api/crm/coupons', authenticateToken, requireAdmin, (req, res) => {
+  const coupons = db.get('coupons') || [];
+  res.json(coupons);
+});
+
+app.post('/api/crm/coupons', authenticateToken, requireAdmin, (req, res) => {
+  const { code, discountPercentage, maxUses } = req.body;
+  if (!code || !discountPercentage) {
+    return res.status(400).json({ error: 'Code and discount percentage are required' });
+  }
+  const newCoupon = {
+    code: code.toUpperCase(),
+    discountPercentage: parseInt(discountPercentage),
+    maxUses: parseInt(maxUses) || 0,
+    uses: 0,
+    createdAt: new Date().toISOString()
+  };
+  const saved = db.insert('coupons', newCoupon);
+  res.status(201).json(saved);
+});
+
+app.delete('/api/crm/coupons/:id', authenticateToken, requireAdmin, (req, res) => {
+  db.remove('coupons', req.params.id);
+  res.json({ success: true });
+});
+
+app.post('/api/coupons/validate', authenticateToken, (req, res) => {
+  const { code } = req.body;
+  const coupons = db.get('coupons') || [];
+  const coupon = coupons.find(c => c.code === code.toUpperCase());
+  if (!coupon) return res.status(404).json({ error: 'Invalid promo code' });
+  if (coupon.maxUses > 0 && coupon.uses >= coupon.maxUses) {
+    return res.status(400).json({ error: 'Promo code usage limit reached' });
+  }
+  res.json(coupon);
+});
+
+app.post('/api/crm/campaigns/flash-sale', authenticateToken, requireAdmin, (req, res) => {
+  const { productIds, discountPercentage } = req.body;
+  if (!productIds || !Array.isArray(productIds)) {
+    return res.status(400).json({ error: 'Invalid product list' });
+  }
+  const products = db.get('products');
+  
+  // Clear all previous discounts
+  products.forEach(p => {
+    delete p.discountPrice;
+  });
+  
+  // Apply new discounts
+  products.forEach(p => {
+    if (productIds.includes(p.id)) {
+      p.discountPrice = p.price - (p.price * (discountPercentage / 100));
+    }
+  });
+  
+  db.set('products', products);
+  res.json({ success: true });
+});
+
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`==================================================`);

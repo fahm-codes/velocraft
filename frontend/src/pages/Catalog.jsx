@@ -249,7 +249,7 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
         
         {/* Flash Sale Horizontal Scroll */}
         <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '16px', scrollSnapType: 'x mandatory' }}>
-          {products.slice(0, 4).map(product => (
+          {products.filter(p => p.discountPrice).map(product => (
             <div 
               key={`flash-${product.id}`} 
               className="product-card" 
@@ -259,7 +259,7 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
               <div style={{ position: 'relative', height: '160px' }}>
                 <img src={product.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={product.name} />
                 <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--accent-red)', color: '#fff', padding: '4px 10px', borderBottomLeftRadius: '12px', fontWeight: 'bold', fontSize: '0.8rem' }}>
-                  50% OFF
+                  {Math.round(((product.price - product.discountPrice) / product.price) * 100)}% OFF
                 </div>
               </div>
               <div style={{ padding: '12px' }}>

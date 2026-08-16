@@ -1,4 +1,4 @@
-﻿import { apiFetch } from '../api';
+import { apiFetch } from '../api';
 import React, { useState, useEffect } from 'react';
 import CarGraphic from '../components/CarGraphic';
 import { 
@@ -19,7 +19,12 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [tickets, setTickets] = useState([]);
+  const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Orders Filter State
+  const [orderSearch, setOrderSearch] = useState('');
+  const [orderStatusFilter, setOrderStatusFilter] = useState('All');
 
   // Edit / Add Product Modal State
   const [showProductModal, setShowProductModal] = useState(false);
@@ -36,6 +41,13 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
   // Ticket detail view state
   const [activeTicket, setActiveTicket] = useState(null);
   const [adminReplyText, setAdminReplyText] = useState('');
+
+  // Campaign Manager State
+  const [flashSaleDiscount, setFlashSaleDiscount] = useState('50');
+  const [flashSaleProducts, setFlashSaleProducts] = useState([]);
+  const [promoCode, setPromoCode] = useState('');
+  const [promoDiscount, setPromoDiscount] = useState('');
+  const [promoLimit, setPromoLimit] = useState('');
 
   // Fetch data depending on tab
   const fetchData = async () => {
@@ -76,6 +88,13 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
       if (!tickRes.ok) throw new Error('Failed to load support tickets');
       const tickData = await tickRes.json();
       setTickets(tickData);
+
+      // Load coupons
+      const coupRes = await apiFetch('/api/crm/coupons', { headers });
+      if (coupRes.ok) {
+        const coupData = await coupRes.json();
+        setCoupons(coupData);
+      }
 
       // Keep active ticket data updated if open
       if (activeTicket) {
@@ -312,6 +331,45 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
     }
   };
 
+  const handleApplyFlashSale = async (e) => {
+    e.preventDefault();
+    if (flashSaleProducts.length === 0) {
+      showToast('Select at least one product for the Flash Sale', 'error');
+      return;
+    }
+    try {
+      const res = await apiFetch('/api/crm/campaigns/flash-sale', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ productIds: flashSaleProducts, discountPercentage: parseInt(flashSaleDiscount) })
+      });
+      if (!res.ok) throw new Error('Failed to update flash sale');
+      showToast('Flash Sale Campaign Updated!', 'success');
+      fetchData();
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  };
+
+  const handleCreateCoupon = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await apiFetch('/api/crm/coupons', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ code: promoCode, discountPercentage: promoDiscount, maxUses: promoLimit })
+      });
+      if (!res.ok) throw new Error('Failed to create coupon');
+      setPromoCode('');
+      setPromoDiscount('');
+      setPromoLimit('');
+      showToast('Promo Code Generated!', 'success');
+      fetchData();
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  };
+
   return (
     <div className="animate-fade-in" style={{ marginTop: '20px' }}>
       {/* Header and Toggle Details */}
@@ -371,6 +429,13 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                 >
                   <MessageSquare size={18} />
                   <span>Ticket Resolver</span>
+                </button>
+                <button 
+                  className={`crm-sidebar-btn ${activeTab === 'campaigns' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('campaigns')}
+                >
+                  <Gift size={18} />
+                  <span>Campaigns & Promos</span>
                 </button>
               </>
             ) : (
@@ -514,7 +579,31 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
               {/* --- ORDERS Tab --- */}
               {activeTab === 'orders' && (
                 <div className="glass-card">
-                  <h3 style={{ fontSize: '1.15rem', marginBottom: '16px' }}>Client Orders Tracker</h3>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '16px' }}>
+                    <h3 style={{ fontSize: '1.15rem', margin: 0 }}>Client Orders Tracker</h3>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <input 
+                        type="text" 
+                        placeholder="Search by ID or Name..." 
+                        value={orderSearch}
+                        onChange={(e) => setOrderSearch(e.target.value)}
+                        className="form-input"
+                        style={{ padding: '8px 12px', width: '250px' }}
+                      />
+                      <select 
+                        className="form-select"
+                        value={orderStatusFilter}
+                        onChange={(e) => setOrderStatusFilter(e.target.value)}
+                        style={{ padding: '8px 30px 8px 12px', width: '150px' }}
+                      >
+                        <option value="All">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                      </select>
+                    </div>
+                  </div>
                   <div className="table-container">
                     <table className="data-table">
                       <thead>
@@ -528,7 +617,12 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {orders.map(order => (
+                        {orders.filter(order => {
+                          const matchesSearch = order.id.toLowerCase().includes(orderSearch.toLowerCase()) || 
+                                                order.customerName.toLowerCase().includes(orderSearch.toLowerCase());
+                          const matchesStatus = orderStatusFilter === 'All' || order.status === orderStatusFilter;
+                          return matchesSearch && matchesStatus;
+                        }).map(order => (
                           <tr key={order.id}>
                             <td style={{ fontWeight: 'bold' }}>#{order.id}</td>
                             <td>
@@ -781,6 +875,82 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                       <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', color: 'var(--text-muted)' }}>
                         <MessageSquare size={40} style={{ marginBottom: '12px', color: 'var(--border-color)' }} />
                         <span>Select a support ticket from the sidebar to reply.</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* --- CAMPAIGNS TAB --- */}
+              {activeTab === 'campaigns' && isAdmin && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                  
+                  {/* Flash Sale Config */}
+                  <div className="glass-card">
+                    <h3 style={{ fontSize: '1.15rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Gift size={20} style={{ color: 'var(--accent-red)' }} />
+                      <span>Flash Sale Configuration</span>
+                    </h3>
+                    <form onSubmit={handleApplyFlashSale} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      <div className="form-group">
+                        <label className="form-label">Discount Percentage</label>
+                        <input type="number" className="form-input" value={flashSaleDiscount} onChange={(e) => setFlashSaleDiscount(e.target.value)} min="1" max="99" required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Select Products</label>
+                        <select 
+                          multiple 
+                          className="form-input" 
+                          style={{ height: '150px' }} 
+                          value={flashSaleProducts} 
+                          onChange={(e) => {
+                            const selected = Array.from(e.target.selectedOptions, option => option.value);
+                            setFlashSaleProducts(selected);
+                          }}
+                        >
+                          {products.map(p => (
+                            <option key={p.id} value={p.id}>{p.name} - ৳{p.price}</option>
+                          ))}
+                        </select>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '8px', display: 'block' }}>Hold CTRL/CMD to select multiple</span>
+                      </div>
+                      <button type="submit" className="btn btn-primary">Apply Flash Sale</button>
+                    </form>
+                  </div>
+
+                  {/* Promo Code Config */}
+                  <div className="glass-card">
+                    <h3 style={{ fontSize: '1.15rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <DollarSign size={20} style={{ color: 'var(--accent-green)' }} />
+                      <span>Promo Code Engine</span>
+                    </h3>
+                    <form onSubmit={handleCreateCoupon} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      <div className="form-group">
+                        <label className="form-label">Coupon Code (e.g. VIP20)</label>
+                        <input type="text" className="form-input" value={promoCode} onChange={(e) => setPromoCode(e.target.value.toUpperCase())} required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Discount Percentage</label>
+                        <input type="number" className="form-input" value={promoDiscount} onChange={(e) => setPromoDiscount(e.target.value)} min="1" max="100" required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Usage Limit (0 for unlimited)</label>
+                        <input type="number" className="form-input" value={promoLimit} onChange={(e) => setPromoLimit(e.target.value)} min="0" required />
+                      </div>
+                      <button type="submit" className="btn btn-secondary">Generate Promo Code</button>
+                    </form>
+
+                    {coupons.length > 0 && (
+                      <div style={{ marginTop: '24px' }}>
+                        <h4 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>Active Promo Codes</h4>
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {coupons.map(c => (
+                            <li key={c.id || c.code} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px' }}>
+                              <span style={{ fontWeight: 'bold', color: 'var(--accent-cyan)' }}>{c.code}</span>
+                              <span>{c.discountPercentage}% OFF (Used: {c.uses}/{c.maxUses || '∞'})</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     )}
                   </div>

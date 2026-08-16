@@ -65,15 +65,26 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
   const discountAmount = subtotal * appliedDiscount;
   const total = (subtotal - discountAmount) + shipping;
 
-  const handleApplyCoupon = () => {
-    if (couponCode.toUpperCase() === 'SUPER10') {
-      setAppliedDiscount(0.10); // 10% off
-      setIsFreeShipping(true);
-      showToast('SUPER10 applied! 10% off and Free Delivery.', 'success');
-    } else {
+  const handleApplyCoupon = async () => {
+    if (!couponCode) return;
+    try {
+      const res = await apiFetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode })
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Invalid promo code');
+      }
+      const data = await res.json();
+      setAppliedDiscount(data.discountPercentage / 100);
+      setIsFreeShipping(true); // Assuming coupons also grant free shipping for now
+      showToast(`${data.code} applied! ${data.discountPercentage}% off.`, 'success');
+    } catch (err) {
       setAppliedDiscount(0);
       setIsFreeShipping(false);
-      showToast('Invalid or expired promo code.', 'error');
+      showToast(err.message, 'error');
     }
   };
 
