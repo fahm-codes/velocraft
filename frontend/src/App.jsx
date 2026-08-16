@@ -33,8 +33,12 @@ export default function App() {
   });
 
   // Routing state
-  const [currentPage, setCurrentPage] = useState('catalog'); // catalog, product-detail, cart, checkout, orders, tickets, crm-*
-  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(() => {
+    return sessionStorage.getItem('velocraft_page') || 'catalog';
+  }); 
+  const [selectedProductId, setSelectedProductId] = useState(() => {
+    return sessionStorage.getItem('velocraft_productId') || null;
+  });
   
   // Search state
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
@@ -43,10 +47,22 @@ export default function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
 
-  // Sync cart to local storage
+  // Sync state to local storage / session storage
   useEffect(() => {
     localStorage.setItem('velocraft_cart', JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    sessionStorage.setItem('velocraft_page', currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (selectedProductId) {
+      sessionStorage.setItem('velocraft_productId', selectedProductId);
+    } else {
+      sessionStorage.removeItem('velocraft_productId');
+    }
+  }, [selectedProductId]);
 
   // Toast notifier triggers
   const showToast = (message, type = 'success') => {
