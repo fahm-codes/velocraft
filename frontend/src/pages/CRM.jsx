@@ -5,7 +5,7 @@ import {
   BarChart3, ShoppingBag, Plus, Edit, Trash2, 
   Users, MessageSquare, AlertTriangle, CheckSquare, 
   ShieldAlert, DollarSign, Package, X, RefreshCw,
-  User, History, Ticket
+  User, History, Ticket, Gift
 } from 'lucide-react';
 import Profile from './Profile';
 import OrderHistory from './OrderHistory';
