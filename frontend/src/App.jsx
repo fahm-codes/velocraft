@@ -37,7 +37,8 @@ export default function App() {
     return sessionStorage.getItem('velocraft_page') || 'catalog';
   }); 
   const [selectedProductId, setSelectedProductId] = useState(() => {
-    return sessionStorage.getItem('velocraft_productId') || null;
+    const val = sessionStorage.getItem('velocraft_productId');
+    return (val === 'null' || !val) ? null : val;
   });
   
   // Search state
@@ -115,6 +116,7 @@ export default function App() {
           brand: product.brand,
           category: product.category,
           price: product.price,
+          discountPrice: product.discountPrice,
           imageUrl: product.imageUrl,
           quantity: quantity
         }];
