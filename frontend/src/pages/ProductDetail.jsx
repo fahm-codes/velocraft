@@ -21,6 +21,36 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast,
   const [showOneTap, setShowOneTap] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
 
+  // Synthesize Engine Sound
+  const playEngineSound = () => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.type = 'sawtooth';
+      
+      // Rev up
+      osc.frequency.setValueAtTime(50, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.5);
+      osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 1.2);
+      
+      // Volume envelope
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
+      
+      osc.start();
+      osc.stop(ctx.currentTime + 1.2);
+    } catch (e) {
+      console.log('Audio not supported');
+    }
+  };
+
   const fetchProductDetails = async () => {
     try {
       const res = await apiFetch(`/api/products/${productId}`);
@@ -170,8 +200,17 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast,
               style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.8))' }} 
             />
           </Tilt>
-          <div style={{ position: 'absolute', bottom: '40px', color: 'rgba(255,255,255,0.3)', fontSize: '0.9rem' }}>
-            Hover or drag to inspect model
+          <div style={{ position: 'absolute', bottom: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            <button 
+              className="btn btn-primary"
+              onClick={(e) => { e.stopPropagation(); playEngineSound(); }}
+              style={{ padding: '12px 24px', background: 'var(--accent-red)', border: 'none', borderRadius: '30px', fontWeight: 'bold' }}
+            >
+              🔊 Rev Engine
+            </button>
+            <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.9rem' }}>
+              Hover or drag to inspect model
+            </div>
           </div>
         </div>
       )}
@@ -222,7 +261,7 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast,
           >
             <div 
               style={{ width: '100%', maxWidth: '420px', animation: 'float 6s ease-in-out infinite' }}
-              onClick={() => setIsZoomed(true)}
+              onClick={() => { setIsZoomed(true); playEngineSound(); }}
             >
               <img 
                 src={product.imageUrl} 
@@ -238,7 +277,7 @@ export default function ProductDetail({ productId, onBack, addToCart, showToast,
           <button 
             className="btn btn-secondary"
             style={{ position: 'absolute', bottom: '16px', left: '16px', padding: '6px 12px', fontSize: '0.8rem', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', zIndex: 10 }}
-            onClick={() => setIsZoomed(true)}
+            onClick={() => { setIsZoomed(true); playEngineSound(); }}
           >
             <Box size={14} /> Enter Showroom
           </button>

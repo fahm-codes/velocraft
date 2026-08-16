@@ -161,11 +161,14 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
   }
 
   return (
-    <div className="animate-fade-in" style={{ marginTop: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <ShoppingBag size={28} style={{ color: 'var(--accent-cyan)' }} />
-        <span>My Orders</span>
+    <div className="animate-fade-in" style={{ marginTop: '20px', maxWidth: '1000px', margin: '0 auto' }}>
+      <h1 style={{ fontSize: '2rem', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <Box size={28} style={{ color: 'var(--accent-cyan)' }} />
+        <span>My Digital Garage</span>
       </h1>
+      <p style={{ color: 'var(--text-secondary)', marginBottom: '32px' }}>
+        Your personal collection of acquired models.
+      </p>
 
       {/* --- DARAZ STYLE ORDER STATUS GRID --- */}
       <div className="glass-card" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', padding: '16px 20px', alignItems: 'center' }}>
@@ -206,143 +209,80 @@ export default function OrderHistory({ token, setCurrentPage, showToast }) {
       </div>
 
 
-      {orders.length === 0 ? (
-        <div className="glass-card" style={{ textAlign: 'center', padding: '60px 24px' }}>
-          <h3 style={{ marginBottom: '8px' }}>No orders recorded</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '20px', fontSize: '0.9rem' }}>
-            You haven't placed any orders yet. Start your collection by adding items to your cart.
-          </p>
-          <button className="btn btn-primary" onClick={() => setCurrentPage('catalog')}>
-            Explore Replicas
-          </button>
-        </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {orders.map(order => (
-            <div key={order.id} className="glass-card" style={{ padding: '24px' }}>
-              {/* Order Header */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid var(--border-color)',
-                paddingBottom: '16px',
-                marginBottom: '16px'
-              }}>
-                <div>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Order Identifier</span>
-                  <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', marginTop: '2px' }}>#{order.id}</h3>
-                </div>
-
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    <Calendar size={14} />
-                    <span>{new Date(order.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
-                  </div>
-                  <span className={`badge ${getStatusBadgeClass(order.status)}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    {getStatusIcon(order.status)}
-                    <span>{order.status}</span>
-                  </span>
-                </div>
+      {/* --- THE DIGITAL GARAGE GRID --- */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '24px',
+        marginBottom: '40px'
+      }}>
+        {orders.flatMap(order => order.items.map(item => ({ ...item, orderId: order.id, status: order.status }))).map((car, idx) => (
+          <div key={`${car.orderId}-${idx}`} className="glass-card" style={{ 
+            position: 'relative', 
+            overflow: 'hidden', 
+            borderRadius: '16px',
+            background: 'linear-gradient(180deg, #11131a 0%, #0a0b0e 100%)',
+            border: '1px solid rgba(0, 229, 255, 0.1)',
+            boxShadow: 'inset 0 0 20px rgba(0,229,255,0.05), 0 10px 30px rgba(0,0,0,0.5)'
+          }}>
+            {/* Neon Floor Grid */}
+            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '50%', background: 'linear-gradient(0deg, rgba(0,229,255,0.1) 0%, transparent 100%)', borderTop: '1px solid rgba(0,229,255,0.2)', transform: 'perspective(100px) rotateX(60deg)', transformOrigin: 'bottom' }}></div>
+            
+            <div style={{ padding: '24px', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                <span className={`badge ${getStatusBadgeClass(car.status)}`} style={{ fontSize: '0.7rem' }}>
+                  {car.status}
+                </span>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Order #{car.orderId}</span>
+              </div>
+              
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <img 
+                  src={car.imageUrl} 
+                  alt={car.name}
+                  style={{ width: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.8))', transition: 'transform 0.3s ease' }}
+                  onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                  onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                />
               </div>
 
-              {/* Order Items */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
-                {order.items.map((item, idx) => (
-                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem' }}>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--accent-cyan)', fontWeight: 'bold' }}>{item.quantity}x</span>
-                      <div>
-                        <strong style={{ color: 'var(--text-primary)' }}>{item.name}</strong>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{item.brand}</div>
-                      </div>
-                    </div>
-                    <span style={{ fontWeight: '500' }}>৳ {(item.price * item.quantity).toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Shopper Order Actions */}
-              <div style={{
-                borderTop: '1px solid var(--border-color)',
-                paddingTop: '16px',
-                marginTop: '4px',
-                display: 'flex',
-                gap: '10px',
-                justifyContent: 'flex-end',
-                flexWrap: 'wrap'
-              }}>
-                {order.status === 'Pending' && (
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => handleCancelOrder(order.id)}
-                  >
-                    Cancel Order
-                  </button>
-                )}
-
-                {order.status === 'Delivered' && (
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => handleReorder(order.id)}
-                  >
-                    Reorder
-                  </button>
-                )}
-
-                {order.status === 'Delivered' && !order.receivedAt && (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleConfirmReceived(order.id)}
-                  >
-                    Confirm Received
-                  </button>
-                )}
-
-                {order.status === 'Delivered' && order.receivedAt && (
-                  <span style={{
-                    color: 'var(--accent-cyan)',
-                    fontSize: '0.85rem',
-                    fontWeight: '600',
-                    alignSelf: 'center'
-                  }}>
-                    ✓ Received
-                  </span>
-                )}
-              </div>
-
-              {/* Order Footer summary */}
-              <div style={{
-                borderTop: '1px solid var(--border-color)',
-                paddingTop: '16px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                fontSize: '0.85rem',
-                color: 'var(--text-secondary)'
-              }}>
-                <div>
-                  <strong>Shipping Destination:</strong>
-                  <div style={{ marginTop: '2px', color: 'var(--text-muted)' }}>
-                    {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zipCode}, {order.shippingAddress.country}
-                  </div>
-                </div>
-
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                    <CreditCard size={12} />
-                    <span>{order.paymentMethod}</span>
-                  </div>
-                  <div>
-                    <span style={{ fontSize: '0.9rem' }}>Amount Charged:</span>{' '}
-                    <strong style={{ fontSize: '1.25rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>
-                      ৳ {order.totalAmount.toLocaleString()}
-                    </strong>
-                  </div>
-                </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '4px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{car.name}</h4>
+                <div style={{ fontSize: '0.8rem', color: 'var(--accent-cyan)' }}>{car.brand} • {car.category}</div>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
+
+        {/* Empty Slots to encourage more purchases */}
+        {[...Array(Math.max(0, 4 - orders.flatMap(o => o.items).length))].map((_, i) => (
+          <div key={`empty-${i}`} className="glass-card" style={{ 
+            borderRadius: '16px',
+            background: 'rgba(255,255,255,0.02)',
+            border: '1px dashed rgba(255,255,255,0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '280px',
+            cursor: 'pointer',
+            transition: 'all 0.3s'
+          }}
+          onClick={() => setCurrentPage('catalog')}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
+          >
+            <Box size={32} style={{ color: 'var(--text-muted)', marginBottom: '16px' }} />
+            <h4 style={{ color: 'var(--text-secondary)', marginBottom: '8px' }}>Empty Slot</h4>
+            <span style={{ fontSize: '0.8rem', color: 'var(--accent-cyan)' }}>Expand Collection</span>
+          </div>
+        ))}
+      </div>
+      {orders.length === 0 && (
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+            Start your collection by adding items to your cart.
+          </p>
         </div>
       )}
     </div>
