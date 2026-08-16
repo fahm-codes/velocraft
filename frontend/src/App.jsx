@@ -15,6 +15,7 @@ import CRM from './pages/CRM';
 import Profile from './pages/Profile';
 import POS from './pages/POS';
 import Footer from './components/Footer';
+import ChatWidget from './components/ChatWidget';
 
 export default function App() {
   // Authentication state
@@ -312,6 +313,7 @@ export default function App() {
         </a>
       </nav>
 
+      <ChatWidget />
       <Footer />
 
       {/* Shared Modals & Banners */}

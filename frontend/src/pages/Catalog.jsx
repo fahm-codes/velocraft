@@ -177,17 +177,25 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
         {/* Slide 2: Free Delivery Campaign */}
         <div style={{
           position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0,
-          opacity: activeSlide === 2 ? 1 : 0, transition: 'opacity 1s ease-in-out',
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+          opacity: activeSlide === 2 ? 1 : 0, transition: 'opacity 1s ease-in-out'
         }}>
+          <img 
+            src="/campaign_delivery.jpg" 
+            alt="Free Delivery Campaign"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.6)' }}
+          />
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px' }}>
-            <Truck size={64} style={{ color: '#fff', marginBottom: '16px' }} />
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', color: '#ffffff' }}>
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.02em', color: '#10b981', textShadow: '0 4px 20px rgba(16,185,129,0.5)' }}>
               NATIONWIDE FREE DELIVERY
             </h1>
-            <p style={{ fontSize: '1.25rem', maxWidth: '600px', marginBottom: '32px', color: '#ecfdf5', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '1.25rem', maxWidth: '600px', marginBottom: '32px', color: '#ffffff', lineHeight: '1.6', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
               We now deliver anywhere in Bangladesh completely free of charge. No minimum order required!
             </p>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <button className="btn btn-primary" style={{ padding: '14px 36px', fontSize: '1.1rem', borderRadius: '30px', background: 'var(--accent-green)', borderColor: 'var(--accent-green)', color: '#000', fontWeight: 'bold' }} onClick={handleScrollDown}>
+                Claim Offer
+              </button>
+            </div>
           </div>
         </div>
 
