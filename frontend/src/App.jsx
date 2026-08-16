@@ -13,6 +13,7 @@ import OrderHistory from './pages/OrderHistory';
 import SupportTickets from './pages/SupportTickets';
 import CRM from './pages/CRM';
 import Profile from './pages/Profile';
+import POS from './pages/POS';
 import Footer from './components/Footer';
 
 export default function App() {
@@ -155,6 +156,10 @@ export default function App() {
       setCurrentPage('catalog');
       showToast('Unauthorized. Admin access required.', 'error');
     }
+    if (currentPage === 'pos' && (!user || (user.role !== 'admin' && user.role !== 'cashier'))) {
+      setCurrentPage('catalog');
+      showToast('Unauthorized. Staff access required.', 'error');
+    }
   }, [currentPage, user]);
 
   return (
@@ -220,6 +225,13 @@ export default function App() {
             token={token}
             user={user}
             setCurrentPage={setCurrentPage}
+            showToast={showToast}
+          />
+        )}
+
+        {currentPage === 'pos' && user && (
+          <POS 
+            token={token}
             showToast={showToast}
           />
         )}

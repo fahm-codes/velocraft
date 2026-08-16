@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, User, ShieldAlert, LogOut, Ticket, History, Car, ChevronDown } from 'lucide-react';
+import { ShoppingCart, User, ShieldAlert, LogOut, Ticket, History, Car, ChevronDown, Calculator } from 'lucide-react';
 
 export default function Navbar({ 
   user, 
@@ -84,6 +84,22 @@ export default function Navbar({
           >
             <ShieldAlert size={15} />
             <span>{currentPage === 'crm' ? 'Exit Portal' : (user.role === 'admin' ? 'CRM Portal' : 'Shopper Portal')}</span>
+          </button>
+        )}
+
+        {user && (user.role === 'admin' || user.role === 'cashier') && (
+          <button 
+            className="btn btn-secondary" 
+            style={{ 
+              borderColor: 'var(--accent-green)', 
+              color: 'var(--accent-green)',
+              padding: '6px 12px',
+              fontSize: '0.85rem'
+            }}
+            onClick={() => setCurrentPage(currentPage === 'pos' ? 'catalog' : 'pos')}
+          >
+            <Calculator size={15} />
+            <span>{currentPage === 'pos' ? 'Exit POS' : 'Cashier POS'}</span>
           </button>
         )}
 

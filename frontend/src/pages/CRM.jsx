@@ -437,6 +437,13 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                   <Gift size={18} />
                   <span>Campaigns & Promos</span>
                 </button>
+                <button 
+                  className={`crm-sidebar-btn ${activeTab === 'staff' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('staff')}
+                >
+                  <ShieldAlert size={18} />
+                  <span>Staff Management</span>
+                </button>
               </>
             ) : (
               <>
@@ -953,6 +960,74 @@ export default function CRM({ token, user, setCurrentPage, showToast }) {
                         </ul>
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {/* --- STAFF MANAGEMENT TAB --- */}
+              {activeTab === 'staff' && isAdmin && (
+                <div className="glass-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                    <h3 style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <ShieldAlert size={20} style={{ color: 'var(--accent-green)' }} />
+                      <span>Role & Access Management</span>
+                    </h3>
+                  </div>
+                  
+                  <div className="table-responsive">
+                    <table className="crm-table">
+                      <thead>
+                        <tr>
+                          <th>User</th>
+                          <th>Email</th>
+                          <th>Current Role</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {customers.map(customer => (
+                          <tr key={customer.id}>
+                            <td><strong>{customer.name}</strong></td>
+                            <td style={{ color: 'var(--text-secondary)' }}>{customer.email}</td>
+                            <td>
+                              <span className={`badge ${customer.role === 'cashier' ? 'badge-success' : 'badge-info'}`}>
+                                {customer.role || 'customer'}
+                              </span>
+                            </td>
+                            <td>
+                              <select 
+                                className="form-input" 
+                                style={{ padding: '4px 8px', width: 'auto', display: 'inline-block' }}
+                                value={customer.role || 'customer'}
+                                onChange={async (e) => {
+                                  try {
+                                    const res = await apiFetch(`/api/crm/customers/${customer.id}/role`, {
+                                      method: 'PUT',
+                                      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                      body: JSON.stringify({ role: e.target.value })
+                                    });
+                                    if (res.ok) {
+                                      showToast(`${customer.name} is now ${e.target.value}`, 'success');
+                                      fetchData(); // refresh list
+                                    } else {
+                                      const data = await res.json();
+                                      showToast(data.error, 'error');
+                                    }
+                                  } catch (err) {
+                                    showToast('Failed to update role', 'error');
+                                  }
+                                }}
+                              >
+                                <option value="customer">Customer</option>
+                                <option value="shopper">Shopper (Appointed)</option>
+                                <option value="cashier">Cashier (POS)</option>
+                                <option value="admin">Administrator</option>
+                              </select>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               )}

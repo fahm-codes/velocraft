@@ -52,6 +52,15 @@ function requireAdmin(req, res, next) {
   }
 }
 
+// Middleware: Verify Admin or Cashier Access (POS)
+function requireCashierOrAdmin(req, res, next) {
+  if (req.user && (req.user.role === 'admin' || req.user.role === 'cashier')) {
+    next();
+  } else {
+    res.status(403).json({ error: 'Staff clearance required' });
+  }
+}
+
 // Ensure demo accounts always exist with the correct credentials
 function ensureDemoAccounts() {
   const adminHash = '$2a$10$4RY9K7h3bk5PdJrmR70e7eTt4an0H19XxY/GNVbRy4XRg.EcrDJfO';
@@ -265,6 +274,75 @@ app.post('/api/orders', authenticateToken, (req, res) => {
   }
 });
 
+// POS Checkout Endpoint (Physical Store)
+app.post('/api/pos/checkout', authenticateToken, requireCashierOrAdmin, (req, res) => {
+  try {
+    const { items, paymentMethod, walkInPhone, discountCode } = req.body;
+    if (!items || items.length === 0 || !paymentMethod) {
+      return res.status(400).json({ error: 'Missing POS order details' });
+    }
+
+    let totalAmount = 0;
+    const verifiedItems = [];
+    const products = db.get('products');
+
+    for (const cartItem of items) {
+      const prod = products.find(p => p.id === cartItem.productId);
+      if (!prod || prod.stock < cartItem.quantity) {
+        return res.status(400).json({ error: `Insufficient stock for ${cartItem.name}` });
+      }
+
+      prod.stock -= cartItem.quantity;
+      
+      // If item has a global discountPrice, use it
+      const basePrice = prod.discountPrice ? prod.discountPrice : prod.price;
+      totalAmount += basePrice * cartItem.quantity;
+
+      verifiedItems.push({
+        productId: prod.id,
+        name: prod.name,
+        brand: prod.brand,
+        price: prod.price, // original price
+        quantity: cartItem.quantity,
+      });
+    }
+
+    // Apply Coupon if provided
+    let finalDiscount = 0;
+    if (discountCode) {
+      const coupons = db.get('coupons') || [];
+      const coupon = coupons.find(c => c.code === discountCode.toUpperCase());
+      if (coupon && (coupon.maxUses === 0 || coupon.uses < coupon.maxUses)) {
+        finalDiscount = (coupon.discountPercentage / 100) * totalAmount;
+        coupon.uses += 1;
+        db.set('coupons', coupons);
+      }
+    }
+
+    const finalTotal = totalAmount - finalDiscount;
+    db.set('products', products);
+
+    const newOrder = {
+      userId: req.user.id, // cashier ID
+      customerName: walkInPhone ? `Walk-In (${walkInPhone})` : 'Walk-In Customer',
+      customerEmail: 'pos@velocraft.com',
+      items: verifiedItems,
+      shippingAddress: 'In-Store Purchase',
+      paymentMethod: paymentMethod, // 'Cash' or 'Card'
+      totalAmount: finalTotal,
+      status: 'Delivered', // Instantly delivered in store
+      source: 'pos', // Mark as POS order
+      createdAt: new Date().toISOString()
+    };
+
+    const savedOrder = db.insert('orders', newOrder);
+    res.status(201).json({ message: 'POS Sale Completed', order: savedOrder });
+  } catch (error) {
+    console.error('POS Checkout error:', error);
+    res.status(500).json({ error: 'Internal server error processing POS sale' });
+  }
+});
+
 // View Shopper's Own Order History
 app.get('/api/orders/my-orders', authenticateToken, (req, res) => {
   const orders = db.get('orders');
@@ -385,6 +463,7 @@ app.get('/api/crm/customers', authenticateToken, requireAdmin, (req, res) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role,
       orderCount: userOrders.length,
       totalSpent: Math.round(totalSpent * 100) / 100,
       orders: userOrders.map(o => ({
@@ -402,7 +481,7 @@ app.get('/api/crm/customers', authenticateToken, requireAdmin, (req, res) => {
 // CRM: Promote Customer to Admin
 app.put('/api/crm/customers/:id/role', authenticateToken, requireAdmin, (req, res) => {
   const { role } = req.body;
-  if (role !== 'admin' && role !== 'customer' && role !== 'shopper') {
+  if (role !== 'admin' && role !== 'customer' && role !== 'shopper' && role !== 'cashier') {
     return res.status(400).json({ error: 'Invalid role' });
   }
 
