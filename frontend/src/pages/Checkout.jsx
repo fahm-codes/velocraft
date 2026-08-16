@@ -49,7 +49,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
   const [appliedDiscount, setAppliedDiscount] = useState(0);
   const [isFreeShipping, setIsFreeShipping] = useState(false);
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = cart.reduce((sum, item) => sum + ((item.discountPrice || item.price) * item.quantity), 0);
   
   let shipping = 0;
   if (!isFreeShipping) {
@@ -631,7 +631,7 @@ export default function Checkout({ cart, token, user, onClearCart, setCurrentPag
                     <span style={{ color: 'var(--accent-cyan)', fontWeight: 'bold' }}>{item.quantity}x</span>
                     <span style={{ color: 'var(--text-secondary)' }}>{item.name}</span>
                   </div>
-                  <span>৳ {item.price.toLocaleString()}</span>
+                  <span>৳ {(item.discountPrice || item.price).toLocaleString()}</span>
                 </div>
               ))}
             </div>

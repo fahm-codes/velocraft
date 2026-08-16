@@ -265,7 +265,7 @@ export default function Catalog({ onSelectProduct, addToCart, showToast, globalS
               <div style={{ padding: '12px' }}>
                 <h3 style={{ fontSize: '0.9rem', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.name}</h3>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ color: 'var(--accent-red)', fontWeight: 'bold', fontSize: '1.1rem' }}>৳ {(product.price / 2).toLocaleString()}</span>
+                  <span style={{ color: 'var(--accent-red)', fontWeight: 'bold', fontSize: '1.1rem' }}>৳ {(product.discountPrice || (product.price / 2)).toLocaleString()}</span>
                   <span style={{ textDecoration: 'line-through', color: 'var(--text-muted)', fontSize: '0.8rem' }}>৳ {product.price.toLocaleString()}</span>
                 </div>
                 <div style={{ width: '100%', background: 'rgba(255, 42, 95, 0.2)', height: '6px', borderRadius: '3px', marginTop: '12px', overflow: 'hidden' }}>

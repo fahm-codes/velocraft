@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -220,7 +220,8 @@ app.post('/api/orders', authenticateToken, (req, res) => {
 
       // Decrement stock levels
       prod.stock -= cartItem.quantity;
-      totalAmount += prod.price * cartItem.quantity;
+      const finalPrice = prod.discountPrice ? prod.discountPrice : prod.price;
+      totalAmount += finalPrice * cartItem.quantity;
 
       verifiedItems.push({
         productId: prod.id,
